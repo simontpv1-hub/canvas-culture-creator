@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import heroImage1 from "@/assets/hero-1.jpg";
@@ -54,15 +55,21 @@ const BrandStory = () => (
           </h2>
           <div className="space-y-5 text-base sm:text-[17px] font-body text-muted-foreground leading-relaxed">
             <p>
-              Canvas Culture was born from a simple idea: your home should tell your story. Every room is a chance to surround yourself with art that moves you — whether that's a vintage Porsche in your man cave, a sacred image above your fireplace, or something that just makes you laugh every morning.
+              Canvas Culture was born from a simple idea: your home should tell your story. Every room is a chance to surround yourself with art that moves you — a vintage Porsche in your man cave, a sacred image above your fireplace, or something that just makes you smile every morning.
             </p>
             <p>
-              We obsess over print quality so you don't have to. Every canvas is hand-stretched over solid pine bars, printed with archival inks that won't fade, and ready to hang the moment it arrives at your door.
+              We obsess over quality so you don't have to. Every canvas is hand-stretched over solid pine bars, printed with archival inks, and arrives ready to hang.
             </p>
             <p className="font-semibold text-foreground">
-              Made in the USA. Built to last. Chosen with intention.
+              Made in the USA. Built to last.
             </p>
           </div>
+          <Link
+            to="/about"
+            className="inline-block mt-8 text-sm font-body font-semibold text-gold hover:text-gold-hover transition-colors tracking-wide"
+          >
+            Read Our Story →
+          </Link>
         </motion.div>
 
         {/* Image */}
