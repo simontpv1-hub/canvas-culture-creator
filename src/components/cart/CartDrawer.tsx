@@ -1,16 +1,15 @@
-import { X, Plus, Minus, ShoppingBag } from "lucide-react";
+import { X, Plus, Minus, ShoppingBag, Loader2 } from "lucide-react";
 import { useCart } from "@/stores/cartStore";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
 const CartDrawer = () => {
-  const { items, isOpen, closeCart, removeItem, updateQuantity, subtotal } = useCart();
+  const { items, isOpen, closeCart, removeItem, updateQuantity, subtotal, checkout, checkingOut } = useCart();
 
   return (
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -19,7 +18,6 @@ const CartDrawer = () => {
             onClick={closeCart}
           />
 
-          {/* Drawer */}
           <motion.div
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
@@ -27,7 +25,6 @@ const CartDrawer = () => {
             transition={{ type: "spring", stiffness: 400, damping: 40 }}
             className="fixed right-0 top-0 h-full w-full max-w-md bg-background z-50 shadow-2xl flex flex-col"
           >
-            {/* Header */}
             <div className="flex items-center justify-between px-6 py-5 border-b border-border">
               <h2 className="text-lg font-display font-semibold">Your Cart</h2>
               <button onClick={closeCart} className="p-2 hover:text-gold transition-colors active:scale-95">
@@ -35,7 +32,6 @@ const CartDrawer = () => {
               </button>
             </div>
 
-            {/* Items */}
             <div className="flex-1 overflow-y-auto px-6 py-4">
               {items.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full text-center">
@@ -103,15 +99,25 @@ const CartDrawer = () => {
               )}
             </div>
 
-            {/* Footer */}
             {items.length > 0 && (
               <div className="px-6 py-5 border-t border-border">
                 <div className="flex justify-between mb-4">
                   <span className="font-body font-medium">Subtotal</span>
                   <span className="font-body font-semibold">${subtotal().toFixed(2)}</span>
                 </div>
-                <button className="w-full bg-gold hover:bg-gold-hover text-primary-foreground font-body font-semibold py-3.5 transition-all text-sm uppercase tracking-wider hover:shadow-lg active:scale-[0.97] shimmer-sweep-btn">
-                  Proceed to Checkout
+                <button
+                  onClick={checkout}
+                  disabled={checkingOut}
+                  className="w-full bg-gold hover:bg-gold-hover text-primary-foreground font-body font-semibold py-3.5 transition-all text-sm uppercase tracking-wider hover:shadow-lg active:scale-[0.97] shimmer-sweep-btn disabled:opacity-70 flex items-center justify-center gap-2"
+                >
+                  {checkingOut ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Redirecting…
+                    </>
+                  ) : (
+                    "Proceed to Checkout"
+                  )}
                 </button>
                 <p className="text-xs text-muted-foreground text-center mt-3 font-body">
                   Free shipping on orders over $75

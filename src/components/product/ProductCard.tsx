@@ -1,15 +1,15 @@
 import { Link } from "react-router-dom";
-import { Product } from "@/data/products";
-import { motion } from "framer-motion";
+import { ShopifyProduct } from "@/lib/shopify";
 import { useCart } from "@/stores/cartStore";
 
 interface ProductCardProps {
-  product: Product;
+  product: ShopifyProduct;
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {
   const hasSale = !!product.compareAtPrice;
   const { addItem } = useCart();
+  const firstVariant = product.sizes[0];
 
   return (
     <div className="group block">
@@ -26,12 +26,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
               Sale
             </span>
           )}
-          {/* Add to cart on hover */}
           <div className="absolute bottom-0 left-0 right-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
             <button
               onClick={(e) => {
                 e.preventDefault();
-                addItem(product, product.sizes[0].label);
+                addItem(product, firstVariant.label, firstVariant.variantId);
               }}
               className="w-full bg-charcoal/90 backdrop-blur-sm text-background font-body text-xs uppercase tracking-wider py-3.5 hover:bg-gold transition-colors active:scale-[0.97]"
             >

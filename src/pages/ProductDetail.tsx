@@ -5,7 +5,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import CartDrawer from "@/components/cart/CartDrawer";
 import ProductCard from "@/components/product/ProductCard";
-import { products } from "@/data/products";
+import { useShopifyProduct, useShopifyProducts } from "@/hooks/useShopifyProducts";
 import { useCart } from "@/stores/cartStore";
 import { Paintbrush, RotateCcw, Truck, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -14,11 +14,33 @@ const tabs = ["Overview", "Materials", "Shipping"];
 
 const ProductDetail = () => {
   const { slug } = useParams();
-  const product = products.find((p) => p.slug === slug);
+  const { data: product, isLoading } = useShopifyProduct(slug);
+  const { data: allProducts = [] } = useShopifyProducts();
   const { addItem } = useCart();
   const [selectedSize, setSelectedSize] = useState(0);
   const [activeTab, setActiveTab] = useState("Overview");
   const [added, setAdded] = useState(false);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <PromoBanner />
+        <Header />
+        <CartDrawer />
+        <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-8 py-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20">
+            <div className="aspect-[3/4] bg-secondary animate-pulse" />
+            <div className="space-y-4">
+              <div className="h-8 w-3/4 bg-secondary animate-pulse rounded" />
+              <div className="h-6 w-1/4 bg-secondary animate-pulse rounded" />
+              <div className="h-12 w-full bg-secondary animate-pulse rounded mt-8" />
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -39,13 +61,14 @@ const ProductDetail = () => {
     );
   }
 
-  const currentPrice = product.sizes[selectedSize].price;
-  const related = products
-    .filter((p) => p.id !== product.id && p.category.some((c) => product.category.includes(c)))
+  const currentSize = product.sizes[selectedSize];
+  const currentPrice = currentSize?.price ?? product.price;
+  const related = allProducts
+    .filter((p) => p.id !== product.id && p.tags.some((t) => product.tags.includes(t)))
     .slice(0, 4);
 
   const handleAdd = () => {
-    addItem(product, product.sizes[selectedSize].label);
+    addItem(product, currentSize.label, currentSize.variantId);
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   };
@@ -58,7 +81,6 @@ const ProductDetail = () => {
 
       <main className="flex-1">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 py-10">
-          {/* Breadcrumb */}
           <nav className="text-xs font-body text-muted-foreground mb-8">
             <Link to="/" className="hover:text-gold transition-colors">Home</Link>
             <span className="mx-2">/</span>
@@ -68,21 +90,15 @@ const ProductDetail = () => {
           </nav>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20">
-            {/* Image */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6 }}
               className="aspect-[3/4] bg-secondary overflow-hidden"
             >
-              <img
-                src={product.image}
-                alt={product.title}
-                className="w-full h-full object-cover"
-              />
+              <img src={product.image} alt={product.title} className="w-full h-full object-cover" />
             </motion.div>
 
-            {/* Details */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -96,40 +112,40 @@ const ProductDetail = () => {
               <div className="flex items-center gap-3 mb-8">
                 <span className="text-2xl font-body font-semibold">${currentPrice.toFixed(2)}</span>
                 {product.compareAtPrice && (
-                  <span className="text-lg font-body text-muted-foreground line-through">
-                    ${product.compareAtPrice.toFixed(2)}
-                  </span>
-                )}
-                {product.compareAtPrice && (
-                  <span className="bg-gold text-primary-foreground text-xs font-body font-semibold px-2 py-1 uppercase">
-                    Sale
-                  </span>
+                  <>
+                    <span className="text-lg font-body text-muted-foreground line-through">
+                      ${product.compareAtPrice.toFixed(2)}
+                    </span>
+                    <span className="bg-gold text-primary-foreground text-xs font-body font-semibold px-2 py-1 uppercase">
+                      Sale
+                    </span>
+                  </>
                 )}
               </div>
 
-              {/* Size selector */}
-              <div className="mb-8">
-                <h3 className="text-xs font-body font-semibold uppercase tracking-widest text-muted-foreground mb-3">
-                  Size
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {product.sizes.map((size, i) => (
-                    <button
-                      key={size.label}
-                      onClick={() => setSelectedSize(i)}
-                      className={`px-6 py-2.5 text-sm font-body border transition-all ${
-                        i === selectedSize
-                          ? "border-gold bg-gold text-primary-foreground"
-                          : "border-border hover:border-gold"
-                      }`}
-                    >
-                      {size.label}
-                    </button>
-                  ))}
+              {product.sizes.length > 1 && (
+                <div className="mb-8">
+                  <h3 className="text-xs font-body font-semibold uppercase tracking-widest text-muted-foreground mb-3">
+                    Size
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {product.sizes.map((size, i) => (
+                      <button
+                        key={size.label}
+                        onClick={() => setSelectedSize(i)}
+                        className={`px-6 py-2.5 text-sm font-body border transition-all ${
+                          i === selectedSize
+                            ? "border-gold bg-gold text-primary-foreground"
+                            : "border-border hover:border-gold"
+                        }`}
+                      >
+                        {size.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
-              {/* Add to Cart */}
               <button
                 onClick={handleAdd}
                 className={`w-full font-body font-semibold py-4 text-sm uppercase tracking-widest transition-all mb-8 ${
@@ -140,29 +156,17 @@ const ProductDetail = () => {
               >
                 <AnimatePresence mode="wait">
                   {added ? (
-                    <motion.span
-                      key="check"
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0 }}
-                      className="flex items-center justify-center gap-2"
-                    >
+                    <motion.span key="check" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="flex items-center justify-center gap-2">
                       <Check className="w-4 h-4" /> Added to Cart
                     </motion.span>
                   ) : (
-                    <motion.span
-                      key="add"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                    >
+                    <motion.span key="add" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                       Add to Cart — ${currentPrice.toFixed(2)}
                     </motion.span>
                   )}
                 </AnimatePresence>
               </button>
 
-              {/* Tabs */}
               <div className="mb-8">
                 <div className="flex border-b border-border">
                   {tabs.map((tab) => (
@@ -175,10 +179,7 @@ const ProductDetail = () => {
                     >
                       {tab}
                       {activeTab === tab && (
-                        <motion.div
-                          layoutId="tab-underline"
-                          className="absolute bottom-0 left-0 right-0 h-px bg-gold"
-                        />
+                        <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-px bg-gold" />
                       )}
                     </button>
                   ))}
@@ -194,7 +195,6 @@ const ProductDetail = () => {
                 </div>
               </div>
 
-              {/* Trust badges */}
               <div className="space-y-3 border-t border-border pt-6">
                 {[
                   { icon: Paintbrush, text: "Hand-Made in the USA" },
@@ -210,7 +210,6 @@ const ProductDetail = () => {
             </motion.div>
           </div>
 
-          {/* Related */}
           {related.length > 0 && (
             <motion.section
               initial={{ opacity: 0, y: 30 }}
