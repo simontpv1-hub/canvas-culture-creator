@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef } from "react";
+import { motion } from "framer-motion";
 import { products } from "@/data/products";
 import ProductCard from "@/components/product/ProductCard";
 
@@ -21,30 +22,36 @@ const ProductCarousel = ({ title, viewAllLink, filterTag }: ProductCarouselProps
   };
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-8 py-12">
-      <div className="flex items-center justify-between mb-8">
+    <motion.section
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+      className="max-w-7xl mx-auto px-4 sm:px-8 py-16"
+    >
+      <div className="flex items-center justify-between mb-10">
         <h2 className="text-2xl sm:text-3xl font-display font-semibold text-foreground">
           {title}
         </h2>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           {viewAllLink && (
             <Link
               to={viewAllLink}
-              className="text-sm font-body font-medium text-gold hover:text-gold-hover transition-colors underline underline-offset-4"
+              className="text-sm font-body font-medium text-foreground hover:text-gold transition-colors tracking-wide"
             >
-              View All
+              View All →
             </Link>
           )}
           <div className="hidden sm:flex gap-1">
             <button
               onClick={() => scroll(-1)}
-              className="w-9 h-9 border border-border flex items-center justify-center hover:border-gold transition-colors"
+              className="w-10 h-10 border border-border flex items-center justify-center hover:border-gold hover:text-gold transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
               onClick={() => scroll(1)}
-              className="w-9 h-9 border border-border flex items-center justify-center hover:border-gold transition-colors"
+              className="w-10 h-10 border border-border flex items-center justify-center hover:border-gold hover:text-gold transition-colors"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -54,15 +61,21 @@ const ProductCarousel = ({ title, viewAllLink, filterTag }: ProductCarouselProps
       <div
         ref={scrollRef}
         className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 snap-x"
-        style={{ scrollbarWidth: "none" }}
       >
-        {filtered.map((product) => (
-          <div key={product.id} className="flex-shrink-0 w-56 sm:w-64 snap-start">
+        {filtered.map((product, i) => (
+          <motion.div
+            key={product.id}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: i * 0.08 }}
+            className="flex-shrink-0 w-56 sm:w-64 snap-start"
+          >
             <ProductCard product={product} />
-          </div>
+          </motion.div>
         ))}
       </div>
-    </section>
+    </motion.section>
   );
 };
 

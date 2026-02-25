@@ -6,6 +6,8 @@ import HeroSlideshow from "@/components/home/HeroSlideshow";
 import TrustBadges from "@/components/home/TrustBadges";
 import FeaturedCollections from "@/components/home/FeaturedCollections";
 import ProductCarousel from "@/components/home/ProductCarousel";
+import BrandStory from "@/components/home/BrandStory";
+import CustomCanvasCTA from "@/components/home/CustomCanvasCTA";
 import PopularCategories from "@/components/home/PopularCategories";
 import NewsletterSignup from "@/components/home/NewsletterSignup";
 
@@ -20,11 +22,13 @@ const Index = () => {
         <HeroSlideshow />
         <TrustBadges />
         <FeaturedCollections />
+        <BrandStory />
         <ProductCarousel
-          title="Best Sellers"
+          title="Our Best Sellers"
           viewAllLink="/collections/best-sellers"
           filterTag="best-seller"
         />
+        <CustomCanvasCTA />
         <PopularCategories />
         <ProductCarousel
           title="Trending This Week"
