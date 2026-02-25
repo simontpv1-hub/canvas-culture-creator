@@ -1,0 +1,21 @@
+<div class="promo-banner">
+  <div class="marquee-track">
+    {%- for i in (1..4) -%}
+      <span>{{ section.settings.text }}</span>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Announcement Bar",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Banner Text",
+      "default": "🖼️ BUY 3 GET 4TH FREE — BUY3GET1 · 🚚 FREE SHIPPING OVER $75 · 🇺🇸 HAND-MADE IN USA · ↩️ 30-DAY RETURNS · ⭐ 10,000+ HAPPY CUSTOMERS"
+    }
+  ]
+}
+{% endschema %}

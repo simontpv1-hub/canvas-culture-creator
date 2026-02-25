@@ -1,0 +1,31 @@
+<div class="product-card">
+  <a href="{{ product.url }}">
+    <div class="card-image">
+      {%- if product.featured_image -%}
+        <img class="primary-img" src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.title }}" loading="lazy">
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag }}
+      {%- endif -%}
+      {%- if product.images.size > 1 -%}
+        <div class="second-image">
+          <img src="{{ product.images[1] | image_url: width: 600 }}" alt="{{ product.title }} lifestyle" loading="lazy">
+        </div>
+      {%- endif -%}
+      {%- if product.compare_at_price > product.price -%}
+        <span class="sale-badge">Sale</span>
+      {%- endif -%}
+      <div class="add-to-cart-overlay">
+        <button class="add-to-cart-btn" data-add-to-cart data-variant-id="{{ product.selected_or_first_available_variant.id }}">Add to Cart</button>
+      </div>
+    </div>
+  </a>
+  <div class="card-info">
+    <a href="{{ product.url }}"><h3 class="card-title">{{ product.title }}</h3></a>
+    <div class="card-price">
+      <span class="current">{{ product.price | money }}</span>
+      {%- if product.compare_at_price > product.price -%}
+        <span class="compare">{{ product.compare_at_price | money }}</span>
+      {%- endif -%}
+    </div>
+  </div>
+</div>

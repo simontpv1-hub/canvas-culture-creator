@@ -1,0 +1,33 @@
+<section class="newsletter">
+  <div class="container">
+    <div class="newsletter-inner reveal">
+      <h2>{{ section.settings.heading | default: 'Stay Inspired' }}</h2>
+      <p>{{ section.settings.subheading | default: 'New arrivals, exclusive deals, and art that moves us — delivered to your inbox.' }}</p>
+      <form id="newsletter-form" action="/contact#newsletter" method="POST">
+        <input type="hidden" name="form_type" value="customer">
+        <input type="hidden" name="utf8" value="✓">
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <div class="newsletter-fields">
+          <div class="newsletter-form">
+            <input type="email" name="contact[email]" placeholder="Enter your email" required autocomplete="email">
+            <button type="submit" class="btn-gold btn-shimmer">Subscribe</button>
+          </div>
+        </div>
+        <p class="newsletter-success" style="display:none;color:var(--color-gold);font-weight:500;margin-top:1rem;">
+          Thank you for subscribing! 🎉
+        </p>
+      </form>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Stay Inspired" },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "New arrivals, exclusive deals, and art that moves us — delivered to your inbox." }
+  ],
+  "presets": [{ "name": "Newsletter" }]
+}
+{% endschema %}

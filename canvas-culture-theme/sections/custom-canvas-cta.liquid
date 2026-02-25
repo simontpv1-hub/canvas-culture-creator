@@ -1,0 +1,40 @@
+<section class="cta-dark">
+  <div class="container" style="max-width:100%;padding:0;">
+    <div class="cta-dark-grid">
+      <div class="cta-dark-image reveal-scale">
+        {%- if section.settings.image -%}
+          <img src="{{ section.settings.image | image_url: width: 800 }}" alt="{{ section.settings.image.alt | default: 'Custom canvas' }}" loading="lazy">
+        {%- else -%}
+          {{ 'lifestyle-1' | placeholder_svg_tag }}
+        {%- endif -%}
+      </div>
+      <div class="cta-dark-content reveal">
+        <h2>{{ section.settings.heading | default: 'Create Your Own Custom Canvas Print' }}</h2>
+        <p>{{ section.settings.body | default: "Whether it's a family photo, a beloved pet, a special memory — we print it on museum-quality canvas." }}</p>
+        <div class="sizes">
+          <p>{{ section.settings.sizes | default: 'Sizes from 12×16" up to 48×48"' }}</p>
+          <p>{{ section.settings.orientations | default: 'Portrait · Landscape · Square · Panoramic' }}</p>
+        </div>
+        <a href="{{ section.settings.link | default: '/pages/custom' }}" class="btn btn-gold btn-shimmer">
+          {{ section.settings.cta_text | default: 'Create My Canvas →' }}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Custom Canvas CTA",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Create Your Own Custom Canvas Print" },
+    { "type": "textarea", "id": "body", "label": "Body Text" },
+    { "type": "text", "id": "sizes", "label": "Sizes Text", "default": "Sizes from 12×16\" up to 48×48\"" },
+    { "type": "text", "id": "orientations", "label": "Orientations", "default": "Portrait · Landscape · Square · Panoramic" },
+    { "type": "text", "id": "cta_text", "label": "Button Text", "default": "Create My Canvas →" },
+    { "type": "url", "id": "link", "label": "Button Link" },
+    { "type": "image_picker", "id": "image", "label": "Image" }
+  ],
+  "presets": [{ "name": "Custom Canvas CTA" }]
+}
+{% endschema %}

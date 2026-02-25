@@ -1,0 +1,59 @@
+{%- assign collection_handle = section.settings.collection | default: 'all' -%}
+{%- assign col = collections[collection_handle] -%}
+
+<section class="section-padding" data-carousel>
+  <div class="container">
+    <div class="carousel-header">
+      <h2 class="reveal">{{ section.settings.title | default: 'Our Best Sellers' }}</h2>
+      <div style="display:flex;align-items:center;gap:1rem;">
+        {%- if section.settings.view_all_link -%}
+          <a href="{{ section.settings.view_all_link }}" class="view-all">View All →</a>
+        {%- elsif col -%}
+          <a href="{{ col.url }}" class="view-all">View All →</a>
+        {%- endif -%}
+        <div class="carousel-arrows">
+          <button class="carousel-arrow" data-carousel-prev aria-label="Previous">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+          <button class="carousel-arrow" data-carousel-next aria-label="Next">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="carousel-track">
+      {%- if col -%}
+        {%- for product in col.products limit: 16 -%}
+          <div class="carousel-item reveal" style="transition-delay:{{ forloop.index0 | times: 0.07 }}s">
+            {% render 'product-card', product: product %}
+          </div>
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..8) -%}
+          <div class="carousel-item reveal" style="transition-delay:{{ forloop.index0 | times: 0.07 }}s">
+            <div class="product-card">
+              <div class="card-image">{{ 'product-' | append: i | placeholder_svg_tag }}</div>
+              <div class="card-info">
+                <h3 class="card-title">Sample Product {{ i }}</h3>
+                <div class="card-price"><span class="current">$49.99</span></div>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product Carousel",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "Our Best Sellers" },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "url", "id": "view_all_link", "label": "View All Link" }
+  ],
+  "presets": [{ "name": "Product Carousel" }]
+}
+{% endschema %}

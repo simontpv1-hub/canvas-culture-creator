@@ -1,0 +1,27 @@
+{
+  "current": {
+    "color_gold": "#C9A84C",
+    "color_gold_hover": "#b8953e",
+    "color_charcoal": "#1A1A1A",
+    "color_off_white": "#FAF9F7",
+    "color_border": "#E8E4DE",
+    "promo_text": "🖼️ BUY 3 GET 4TH FREE — BUY3GET1 · 🚚 FREE SHIPPING OVER $75 · 🇺🇸 HAND-MADE IN USA · ↩️ 30-DAY RETURNS · ⭐ 10,000+ HAPPY CUSTOMERS",
+    "show_popup": true,
+    "popup_discount": "WELCOME15",
+    "popup_discount_percent": 15,
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {}
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {}
+      },
+      "announcement-bar": {
+        "type": "announcement-bar",
+        "settings": {}
+      }
+    }
+  }
+}

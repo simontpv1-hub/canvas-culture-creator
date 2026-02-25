@@ -1,0 +1,30 @@
+{%- if settings.show_popup -%}
+<div id="welcome-popup" class="welcome-popup" data-close-popup>
+  <div class="popup-modal" onclick="event.stopPropagation()">
+    <div class="popup-image">
+      {{ 'lifestyle-2' | placeholder_svg_tag }}
+      <div class="popup-image-overlay"></div>
+    </div>
+    <div class="popup-content">
+      <button class="popup-close" data-close-popup aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div id="popup-form-content">
+        <p class="popup-label">Limited Time Offer</p>
+        <h2 class="popup-title font-display">Get {{ settings.popup_discount_percent }}% Off Your First Order</h2>
+        <p class="popup-desc">Join thousands of art lovers and receive exclusive deals, new arrivals, and decorating inspiration.</p>
+        <form id="popup-form" class="popup-form">
+          <input type="email" placeholder="Enter your email" required>
+          <button type="submit" class="btn btn-gold btn-shimmer" style="width:100%;">Claim My {{ settings.popup_discount_percent }}% Off →</button>
+        </form>
+        <p class="popup-disclaimer">No spam. Unsubscribe anytime.</p>
+      </div>
+      <div id="popup-success" style="display:none;text-align:center;padding:2rem 0;">
+        <p style="font-size:1.25rem;font-family:var(--font-display);font-weight:600;margin-bottom:0.5rem;">Check your inbox!</p>
+        <p style="font-size:0.875rem;color:var(--color-muted);">Your code: <strong style="color:var(--color-gold);">{{ settings.popup_discount }}</strong></p>
+        <button data-close-popup style="margin-top:1.5rem;font-size:0.875rem;color:var(--color-gold);text-decoration:underline;">Start Shopping →</button>
+      </div>
+    </div>
+  </div>
+</div>
+{%- endif -%}
