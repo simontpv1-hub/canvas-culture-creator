@@ -5,13 +5,13 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import CartDrawer from "@/components/cart/CartDrawer";
 import ProductCard from "@/components/product/ProductCard";
-import { products } from "@/data/products";
+import { useShopifyProducts, useShopifyCollection } from "@/hooks/useShopifyProducts";
+import { ShopifyProduct } from "@/lib/shopify";
 import { ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
 
 const sortOptions = [
   { label: "Featured", value: "featured" },
-  { label: "Best Selling", value: "best-selling" },
   { label: "A–Z", value: "az" },
   { label: "Z–A", value: "za" },
   { label: "Price: Low–High", value: "price-asc" },
@@ -24,16 +24,24 @@ const Collection = () => {
   const [showInStock, setShowInStock] = useState(true);
   const [visibleCount, setVisibleCount] = useState(16);
 
-  const title = slug
-    ? slug.split("-").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ")
-    : "All Products";
+  const isAll = slug === "all" || !slug;
+
+  const { data: allProducts = [], isLoading: loadingAll } = useShopifyProducts(100);
+  const { data: collectionData, isLoading: loadingCol } = useShopifyCollection(
+    isAll ? undefined : slug
+  );
+
+  const isLoading = isAll ? loadingAll : loadingCol;
+
+  const title = collectionData?.collection?.title
+    ?? (slug ? slug.split("-").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ") : "All Products");
+
+  const baseProducts: ShopifyProduct[] = isAll
+    ? allProducts
+    : (collectionData?.products ?? []);
 
   const filtered = useMemo(() => {
-    let items =
-      slug === "all" || !slug
-        ? products
-        : products.filter((p) => p.category.includes(slug) || p.tags.includes(slug));
-
+    let items = baseProducts;
     if (showInStock) items = items.filter((p) => p.inStock);
 
     switch (sort) {
@@ -43,7 +51,7 @@ const Collection = () => {
       case "price-desc": return [...items].sort((a, b) => b.price - a.price);
       default: return items;
     }
-  }, [slug, sort, showInStock]);
+  }, [baseProducts, sort, showInStock]);
 
   const visible = filtered.slice(0, visibleCount);
 
@@ -64,11 +72,10 @@ const Collection = () => {
             {title}
           </h1>
           <p className="text-sm text-muted-foreground font-body mt-2">
-            {filtered.length} product{filtered.length !== 1 ? "s" : ""}
+            {isLoading ? "Loading..." : `${filtered.length} product${filtered.length !== 1 ? "s" : ""}`}
           </p>
         </motion.div>
 
-        {/* Filter/Sort bar */}
         <div className="flex items-center justify-between mb-8 pb-4 border-b border-border">
           <label className="flex items-center gap-2 text-sm font-body">
             <input
@@ -94,35 +101,44 @@ const Collection = () => {
           </div>
         </div>
 
-        {/* Product grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-          {visible.map((product, i) => (
-            <motion.div
-              key={product.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: i * 0.05 }}
-            >
-              <ProductCard product={product} />
-            </motion.div>
-          ))}
-        </div>
-
-        {filtered.length === 0 && (
-          <div className="text-center py-20">
-            <p className="text-muted-foreground font-body">No products found in this collection.</p>
+        {isLoading ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="aspect-[3/4] bg-secondary animate-pulse rounded" />
+            ))}
           </div>
-        )}
+        ) : (
+          <>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+              {visible.map((product, i) => (
+                <motion.div
+                  key={product.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: i * 0.05 }}
+                >
+                  <ProductCard product={product} />
+                </motion.div>
+              ))}
+            </div>
 
-        {visibleCount < filtered.length && (
-          <div className="text-center mt-12">
-            <button
-              onClick={() => setVisibleCount((c) => c + 16)}
-              className="px-10 py-3 border border-border text-sm font-body font-medium uppercase tracking-wider hover:border-gold hover:text-gold transition-colors"
-            >
-              Load More
-            </button>
-          </div>
+            {filtered.length === 0 && (
+              <div className="text-center py-20">
+                <p className="text-muted-foreground font-body">No products found in this collection.</p>
+              </div>
+            )}
+
+            {visibleCount < filtered.length && (
+              <div className="text-center mt-12">
+                <button
+                  onClick={() => setVisibleCount((c) => c + 16)}
+                  className="px-10 py-3 border border-border text-sm font-body font-medium uppercase tracking-wider hover:border-gold hover:text-gold transition-colors"
+                >
+                  Load More
+                </button>
+              </div>
+            )}
+          </>
         )}
       </main>
 

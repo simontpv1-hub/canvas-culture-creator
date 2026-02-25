@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef } from "react";
 import { motion } from "framer-motion";
-import { products } from "@/data/products";
+import { useShopifyProducts } from "@/hooks/useShopifyProducts";
 import ProductCard from "@/components/product/ProductCard";
 
 interface ProductCarouselProps {
@@ -13,13 +13,30 @@ interface ProductCarouselProps {
 
 const ProductCarousel = ({ title, viewAllLink, filterTag }: ProductCarouselProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const { data: products = [], isLoading } = useShopifyProducts();
+
   const filtered = filterTag
-    ? products.filter((p) => p.tags.includes(filterTag))
+    ? products.filter((p) => p.tags.map(t => t.toLowerCase()).includes(filterTag.toLowerCase()))
     : products;
 
   const scroll = (dir: number) => {
     scrollRef.current?.scrollBy({ left: dir * 300, behavior: "smooth" });
   };
+
+  if (isLoading) {
+    return (
+      <section className="max-w-7xl mx-auto px-4 sm:px-8 py-16">
+        <h2 className="text-2xl sm:text-3xl font-display font-semibold text-foreground mb-10">{title}</h2>
+        <div className="flex gap-4 overflow-hidden">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="flex-shrink-0 w-56 sm:w-64 aspect-[3/4] bg-secondary animate-pulse rounded" />
+          ))}
+        </div>
+      </section>
+    );
+  }
+
+  if (filtered.length === 0) return null;
 
   return (
     <motion.section
