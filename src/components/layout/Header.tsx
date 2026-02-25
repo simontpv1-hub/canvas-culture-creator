@@ -12,7 +12,7 @@ const MegaMenu = ({ columns }: { columns: MegaMenuColumn[] }) => (
     animate={{ opacity: 1, y: 0 }}
     exit={{ opacity: 0, y: -6 }}
     transition={{ duration: 0.25, ease: "easeOut" }}
-    className="fixed left-0 right-0 bg-background border-b border-border shadow-lg z-50"
+    className="fixed left-0 right-0 bg-background border-b border-border shadow-lg z-50 max-h-[80vh] overflow-y-auto"
     style={{ top: "var(--header-bottom, 120px)" }}
   >
     <div className="max-w-7xl mx-auto px-8 py-8">
@@ -55,7 +55,8 @@ const DropdownMenu = ({
     if (triggerRef.current) {
       const rect = triggerRef.current.getBoundingClientRect();
       let left = rect.left;
-      if (left + 200 > window.innerWidth) left = window.innerWidth - 210;
+      const menuWidth = 220;
+      if (left + menuWidth > window.innerWidth) left = window.innerWidth - menuWidth;
       if (left < 10) left = 10;
       setPos({ left });
     }
@@ -67,8 +68,8 @@ const DropdownMenu = ({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -6 }}
       transition={{ duration: 0.25, ease: "easeOut" }}
-      className="fixed bg-background border border-border shadow-lg z-50 min-w-48 py-2"
-      style={{ top: "var(--header-bottom, 120px)", left: pos.left }}
+      className="fixed bg-background border border-border shadow-lg z-50 min-w-[200px] py-2 max-h-[80vh] overflow-y-auto"
+      style={{ top: "var(--header-bottom, 120px)", left: pos.left, maxWidth: "calc(100vw - 20px)" }}
     >
       {items.map((item) => (
         <Link
