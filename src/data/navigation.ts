@@ -7,7 +7,7 @@ export interface NavItem {
   label: string;
   href?: string;
   megaMenu?: MegaMenuColumn[];
-  dropdown?: { label: string; slug: string }[];
+  dropdown?: { label: string; slug: string; href?: string }[];
 }
 
 export const navigation: NavItem[] = [
@@ -166,14 +166,14 @@ export const navigation: NavItem[] = [
       { label: "Vincent Van Gogh", slug: "van-gogh" },
     ],
   },
+  { label: "About Us", href: "/about" },
   {
-    label: "Gifts",
+    label: "Help",
     dropdown: [
-      { label: "For Her", slug: "gifts-for-her" },
-      { label: "For Him", slug: "gifts-for-him" },
-      { label: "Kids", slug: "gifts-kids" },
+      { label: "Shipping & Returns", slug: "shipping-returns", href: "/shipping-returns" },
+      { label: "FAQ", slug: "faq", href: "/faq" },
+      { label: "Contact Us", slug: "contact", href: "/contact" },
+      { label: "Size Guide", slug: "size-guide", href: "/size-guide" },
     ],
   },
-  { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
 ];

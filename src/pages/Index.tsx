@@ -10,6 +10,7 @@ import BrandStory from "@/components/home/BrandStory";
 import CustomCanvasCTA from "@/components/home/CustomCanvasCTA";
 import PopularCategories from "@/components/home/PopularCategories";
 import NewsletterSignup from "@/components/home/NewsletterSignup";
+import WelcomePopup from "@/components/WelcomePopup";
 
 const Index = () => {
   return (
@@ -17,6 +18,7 @@ const Index = () => {
       <PromoBanner />
       <Header />
       <CartDrawer />
+      <WelcomePopup />
 
       <main className="flex-1">
         <HeroSlideshow />

@@ -1,17 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { ShoppingBag, Search, Menu, X, ChevronDown } from "lucide-react";
 import { navigation, NavItem, MegaMenuColumn } from "@/data/navigation";
 import { useCart } from "@/stores/cartStore";
 import { motion, AnimatePresence } from "framer-motion";
 
+/* ── Mega Menu (fixed, centered) ── */
 const MegaMenu = ({ columns }: { columns: MegaMenuColumn[] }) => (
   <motion.div
     initial={{ opacity: 0, y: -4 }}
     animate={{ opacity: 1, y: 0 }}
     exit={{ opacity: 0, y: -4 }}
     transition={{ duration: 0.2 }}
-    className="absolute left-0 top-full w-screen bg-background border-b border-border shadow-lg z-50"
+    className="fixed left-0 right-0 bg-background border-b border-border shadow-lg z-50"
+    style={{ top: "var(--header-bottom, 120px)" }}
   >
     <div className="max-w-7xl mx-auto px-8 py-8">
       <div className="grid grid-cols-3 gap-12">
@@ -39,32 +41,58 @@ const MegaMenu = ({ columns }: { columns: MegaMenuColumn[] }) => (
   </motion.div>
 );
 
-const DropdownMenu = ({ items }: { items: { label: string; slug: string }[] }) => (
-  <motion.div
-    initial={{ opacity: 0, y: -4 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -4 }}
-    transition={{ duration: 0.2 }}
-    className="absolute left-0 top-full bg-background border border-border shadow-lg z-50 min-w-48 py-2"
-  >
-    {items.map((item) => (
-      <Link
-        key={item.slug}
-        to={`/collections/${item.slug}`}
-        className="block px-6 py-2 text-sm font-body text-foreground hover:bg-secondary hover:text-gold transition-colors"
-      >
-        {item.label}
-      </Link>
-    ))}
-  </motion.div>
-);
+/* ── Dropdown ── */
+const DropdownMenu = ({
+  items,
+  triggerRef,
+}: {
+  items: { label: string; slug: string; href?: string }[];
+  triggerRef: React.RefObject<HTMLElement | null>;
+}) => {
+  const [pos, setPos] = useState({ left: 0 });
 
+  useEffect(() => {
+    if (triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect();
+      let left = rect.left;
+      // prevent overflow
+      if (left + 200 > window.innerWidth) left = window.innerWidth - 210;
+      if (left < 10) left = 10;
+      setPos({ left });
+    }
+  }, [triggerRef]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -4 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -4 }}
+      transition={{ duration: 0.2 }}
+      className="fixed bg-background border border-border shadow-lg z-50 min-w-48 py-2"
+      style={{ top: "var(--header-bottom, 120px)", left: pos.left }}
+    >
+      {items.map((item) => (
+        <Link
+          key={item.slug}
+          to={item.href || `/collections/${item.slug}`}
+          className="block px-6 py-2 text-sm font-body text-foreground hover:bg-secondary hover:text-gold transition-colors"
+        >
+          {item.label}
+        </Link>
+      ))}
+    </motion.div>
+  );
+};
+
+/* ── Header ── */
 const Header = () => {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { toggleCart, totalItems } = useCart();
   const count = totalItems();
+  const headerRef = useRef<HTMLElement>(null);
+  const triggerRefs = useRef<Map<string, HTMLElement>>(new Map());
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 80);
@@ -72,8 +100,26 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Update CSS variable for dropdown positioning
+  useEffect(() => {
+    if (headerRef.current) {
+      const updatePos = () => {
+        const rect = headerRef.current!.getBoundingClientRect();
+        document.documentElement.style.setProperty("--header-bottom", `${rect.bottom}px`);
+      };
+      updatePos();
+      window.addEventListener("scroll", updatePos, { passive: true });
+      window.addEventListener("resize", updatePos);
+      return () => {
+        window.removeEventListener("scroll", updatePos);
+        window.removeEventListener("resize", updatePos);
+      };
+    }
+  }, []);
+
   return (
     <header
+      ref={headerRef}
       className={`sticky top-0 z-40 transition-all duration-300 ${
         scrolled
           ? "bg-background/95 backdrop-blur-md shadow-sm"
@@ -137,6 +183,9 @@ const Header = () => {
                     ? setActiveMenu(item.label)
                     : setActiveMenu(null)
                 }
+                ref={(el) => {
+                  if (el) triggerRefs.current.set(item.label, el);
+                }}
               >
                 {item.href ? (
                   <Link
@@ -159,7 +208,10 @@ const Header = () => {
                     <MegaMenu columns={item.megaMenu} />
                   )}
                   {activeMenu === item.label && item.dropdown && (
-                    <DropdownMenu items={item.dropdown} />
+                    <DropdownMenu
+                      items={item.dropdown}
+                      triggerRef={{ current: triggerRefs.current.get(item.label) || null }}
+                    />
                   )}
                 </AnimatePresence>
               </li>
@@ -175,7 +227,7 @@ const Header = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-background border-b border-border overflow-hidden"
+            className="lg:hidden bg-background border-b border-border overflow-y-auto max-h-[70vh]"
           >
             <nav className="px-4 py-4">
               {navigation.map((item) => (
@@ -189,6 +241,7 @@ const Header = () => {
   );
 };
 
+/* ── Mobile Nav Item ── */
 const MobileNavItem = ({ item, onClose }: { item: NavItem; onClose: () => void }) => {
   const [open, setOpen] = useState(false);
   const hasChildren = item.megaMenu || item.dropdown;
@@ -228,7 +281,7 @@ const MobileNavItem = ({ item, onClose }: { item: NavItem; onClose: () => void }
               {links.map((link) => (
                 <Link
                   key={link.slug}
-                  to={`/collections/${link.slug}`}
+                  to={(link as any).href || `/collections/${link.slug}`}
                   onClick={onClose}
                   className="block py-1 text-sm font-body text-muted-foreground hover:text-gold"
                 >
