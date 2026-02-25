@@ -11,10 +11,16 @@ import CustomCanvasCTA from "@/components/home/CustomCanvasCTA";
 import PopularCategories from "@/components/home/PopularCategories";
 import NewsletterSignup from "@/components/home/NewsletterSignup";
 import WelcomePopup from "@/components/WelcomePopup";
+import CustomCursor from "@/components/CustomCursor";
+import ScrollToTop from "@/components/ScrollToTop";
+import ScrollProgressBar from "@/components/ScrollProgressBar";
 
 const Index = () => {
   return (
     <div className="min-h-screen flex flex-col">
+      <CustomCursor />
+      <ScrollProgressBar />
+      <ScrollToTop />
       <PromoBanner />
       <Header />
       <CartDrawer />

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import heroImage1 from "@/assets/hero-1.jpg";
 
@@ -39,74 +39,97 @@ const CountUp = ({ target, suffix, isDecimal }: { target: number; suffix: string
   );
 };
 
-const BrandStory = () => (
-  <section className="bg-off-white py-20 sm:py-28">
-    <div className="max-w-7xl mx-auto px-4 sm:px-8">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-        {/* Text */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-semibold text-foreground leading-tight mb-8">
-            We believe blank walls are missed opportunities.
-          </h2>
-          <div className="space-y-5 text-base sm:text-[17px] font-body text-muted-foreground leading-relaxed">
-            <p>
-              Canvas Culture was born from a simple idea: your home should tell your story. Every room is a chance to surround yourself with art that moves you — a vintage Porsche in your man cave, a sacred image above your fireplace, or something that just makes you smile every morning.
-            </p>
-            <p>
-              We obsess over quality so you don't have to. Every canvas is hand-stretched over solid pine bars, printed with archival inks, and arrives ready to hang.
-            </p>
-            <p className="font-semibold text-foreground">
-              Made in the USA. Built to last.
-            </p>
-          </div>
-          <Link
-            to="/about"
-            className="inline-block mt-8 text-sm font-body font-semibold text-gold hover:text-gold-hover transition-colors tracking-wide"
-          >
-            Read Our Story →
-          </Link>
-        </motion.div>
+const headlineWords = "We believe blank walls are missed opportunities.".split(" ");
 
-        {/* Image */}
-        <motion.div
-          initial={{ opacity: 0, x: 30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          className="relative aspect-[4/5] overflow-hidden"
-        >
-          <img
-            src={heroImage1}
-            alt="Canvas art in a beautiful living room"
-            className="w-full h-full object-cover"
-            loading="lazy"
-          />
-        </motion.div>
-      </div>
+const BrandStory = () => {
+  const imgRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: imgRef, offset: ["start end", "end start"] });
+  const imgY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 pt-16 border-t border-border">
-        {stats.map((stat, i) => (
+  return (
+    <section className="bg-off-white py-20 sm:py-28">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          {/* Text */}
           <motion.div
-            key={stat.label}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: i * 0.1 }}
-            className="text-center"
+            transition={{ duration: 0.7, ease: "easeOut" }}
           >
-            <CountUp target={stat.value} suffix={stat.suffix} isDecimal={stat.isDecimal} />
-            <p className="text-sm font-body text-muted-foreground mt-2">{stat.label}</p>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-semibold text-foreground leading-tight mb-8">
+              {headlineWords.map((word, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: i * 0.08, ease: "easeOut" }}
+                  className="inline-block mr-[0.3em]"
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </h2>
+            <div className="space-y-5 text-base sm:text-[17px] font-body text-muted-foreground leading-relaxed">
+              <p>
+                Canvas Culture was born from a simple idea: your home should tell your story. Every room is a chance to surround yourself with art that moves you — a vintage Porsche in your man cave, a sacred image above your fireplace, or something that just makes you smile every morning.
+              </p>
+              <p>
+                We obsess over quality so you don't have to. Every canvas is hand-stretched over solid pine bars, printed with archival inks, and arrives ready to hang.
+              </p>
+              <p className="font-semibold text-foreground">
+                Made in the USA. Built to last.
+              </p>
+            </div>
+            <Link
+              to="/about"
+              className="inline-block mt-8 text-sm font-body font-semibold text-gold hover:text-gold-hover transition-colors tracking-wide"
+            >
+              Read Our Story →
+            </Link>
           </motion.div>
-        ))}
+
+          {/* Image with parallax */}
+          <motion.div
+            ref={imgRef}
+            initial={{ opacity: 0, scale: 1.08 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.9, ease: "easeOut" }}
+            className="relative aspect-[4/5] overflow-hidden grain-overlay"
+          >
+            <motion.img
+              src={heroImage1}
+              alt="Canvas art in a beautiful living room"
+              className="w-full h-[120%] object-cover"
+              loading="lazy"
+              style={{ y: imgY }}
+            />
+          </motion.div>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 pt-16 border-t border-border">
+          {stats.map((stat, i) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+              className="text-center group cursor-default"
+            >
+              <div className="transition-all duration-300 group-hover:-translate-y-1 group-hover:drop-shadow-md">
+                <CountUp target={stat.value} suffix={stat.suffix} isDecimal={stat.isDecimal} />
+              </div>
+              <p className="text-sm font-body text-muted-foreground mt-2">{stat.label}</p>
+            </motion.div>
+          ))}
+        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 export default BrandStory;

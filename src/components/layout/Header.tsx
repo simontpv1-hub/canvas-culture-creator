@@ -5,13 +5,13 @@ import { navigation, NavItem, MegaMenuColumn } from "@/data/navigation";
 import { useCart } from "@/stores/cartStore";
 import { motion, AnimatePresence } from "framer-motion";
 
-/* ── Mega Menu (fixed, centered) ── */
+/* ── Mega Menu ── */
 const MegaMenu = ({ columns }: { columns: MegaMenuColumn[] }) => (
   <motion.div
-    initial={{ opacity: 0, y: -4 }}
+    initial={{ opacity: 0, y: -6 }}
     animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -4 }}
-    transition={{ duration: 0.2 }}
+    exit={{ opacity: 0, y: -6 }}
+    transition={{ duration: 0.25, ease: "easeOut" }}
     className="fixed left-0 right-0 bg-background border-b border-border shadow-lg z-50"
     style={{ top: "var(--header-bottom, 120px)" }}
   >
@@ -55,7 +55,6 @@ const DropdownMenu = ({
     if (triggerRef.current) {
       const rect = triggerRef.current.getBoundingClientRect();
       let left = rect.left;
-      // prevent overflow
       if (left + 200 > window.innerWidth) left = window.innerWidth - 210;
       if (left < 10) left = 10;
       setPos({ left });
@@ -64,10 +63,10 @@ const DropdownMenu = ({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: -4 }}
+      initial={{ opacity: 0, y: -6 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -4 }}
-      transition={{ duration: 0.2 }}
+      exit={{ opacity: 0, y: -6 }}
+      transition={{ duration: 0.25, ease: "easeOut" }}
       className="fixed bg-background border border-border shadow-lg z-50 min-w-48 py-2"
       style={{ top: "var(--header-bottom, 120px)", left: pos.left }}
     >
@@ -93,6 +92,19 @@ const Header = () => {
   const count = totalItems();
   const headerRef = useRef<HTMLElement>(null);
   const triggerRefs = useRef<Map<string, HTMLElement>>(new Map());
+  const prevCount = useRef(count);
+  const [cartBounce, setCartBounce] = useState(false);
+
+  // Cart bounce animation when count changes
+  useEffect(() => {
+    if (count > prevCount.current) {
+      setCartBounce(true);
+      const t = setTimeout(() => setCartBounce(false), 400);
+      prevCount.current = count;
+      return () => clearTimeout(t);
+    }
+    prevCount.current = count;
+  }, [count]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 80);
@@ -100,7 +112,6 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Update CSS variable for dropdown positioning
   useEffect(() => {
     if (headerRef.current) {
       const updatePos = () => {
@@ -122,34 +133,34 @@ const Header = () => {
       ref={headerRef}
       className={`sticky top-0 z-40 transition-all duration-300 ${
         scrolled
-          ? "bg-background/95 backdrop-blur-md shadow-sm"
+          ? "bg-background/92 backdrop-blur-xl backdrop-saturate-[1.8] shadow-sm"
           : "bg-background"
       }`}
     >
       {/* Logo bar */}
       <div className="border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 flex items-center justify-between h-20">
+        <div className={`max-w-7xl mx-auto px-4 sm:px-8 flex items-center justify-between transition-all duration-300 ${scrolled ? "h-14" : "h-20"}`}>
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden p-2"
+            className="lg:hidden p-2 active:scale-95"
             aria-label="Menu"
           >
             {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
 
           <Link to="/" className="flex-shrink-0">
-            <h1 className="text-2xl sm:text-3xl font-display font-semibold tracking-wide text-charcoal">
+            <h1 className={`font-display font-semibold tracking-wide text-charcoal transition-all duration-300 ${scrolled ? "text-xl sm:text-2xl" : "text-2xl sm:text-3xl"}`}>
               Canvas Culture
             </h1>
           </Link>
 
           <div className="flex items-center gap-4">
-            <button aria-label="Search" className="p-2 hover:text-gold transition-colors">
+            <button aria-label="Search" className="p-2 hover:text-gold transition-colors active:scale-95">
               <Search className="w-5 h-5" />
             </button>
             <button
               onClick={toggleCart}
-              className="p-2 hover:text-gold transition-colors relative"
+              className={`p-2 hover:text-gold transition-all relative active:scale-95 ${cartBounce ? "animate-bounce" : ""}`}
               aria-label="Cart"
             >
               <ShoppingBag className="w-5 h-5" />
@@ -157,6 +168,7 @@ const Header = () => {
                 <motion.span
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 500, damping: 15 }}
                   className="absolute -top-1 -right-1 bg-gold text-primary-foreground text-xs w-5 h-5 rounded-full flex items-center justify-center font-body font-semibold"
                 >
                   {count}
@@ -193,13 +205,13 @@ const Header = () => {
                     className="block px-3 py-3 text-xs font-body font-medium uppercase tracking-widest text-foreground hover:text-gold transition-colors relative group"
                   >
                     {item.label}
-                    <span className="absolute bottom-2 left-3 right-3 h-px bg-gold scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
+                    <span className="absolute bottom-2 left-3 right-3 h-px bg-gold scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-300" />
                   </Link>
                 ) : (
                   <button className="flex items-center gap-1 px-3 py-3 text-xs font-body font-medium uppercase tracking-widest text-foreground hover:text-gold transition-colors relative group">
                     {item.label}
                     <ChevronDown className="w-3 h-3" />
-                    <span className="absolute bottom-2 left-3 right-3 h-px bg-gold scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
+                    <span className="absolute bottom-2 left-3 right-3 h-px bg-gold scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-300" />
                   </button>
                 )}
 
@@ -230,8 +242,15 @@ const Header = () => {
             className="lg:hidden bg-background border-b border-border overflow-y-auto max-h-[70vh]"
           >
             <nav className="px-4 py-4">
-              {navigation.map((item) => (
-                <MobileNavItem key={item.label} item={item} onClose={() => setMobileOpen(false)} />
+              {navigation.map((item, i) => (
+                <motion.div
+                  key={item.label}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.04 }}
+                >
+                  <MobileNavItem item={item} onClose={() => setMobileOpen(false)} />
+                </motion.div>
               ))}
             </nav>
           </motion.div>
