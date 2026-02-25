@@ -7,13 +7,18 @@ import CartDrawer from "@/components/cart/CartDrawer";
 import ProductCard from "@/components/product/ProductCard";
 import { products } from "@/data/products";
 import { useCart } from "@/stores/cartStore";
-import { Paintbrush, RotateCcw, Truck } from "lucide-react";
+import { Paintbrush, RotateCcw, Truck, Check } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+
+const tabs = ["Overview", "Materials", "Shipping"];
 
 const ProductDetail = () => {
   const { slug } = useParams();
   const product = products.find((p) => p.slug === slug);
   const { addItem } = useCart();
   const [selectedSize, setSelectedSize] = useState(0);
+  const [activeTab, setActiveTab] = useState("Overview");
+  const [added, setAdded] = useState(false);
 
   if (!product) {
     return (
@@ -39,6 +44,12 @@ const ProductDetail = () => {
     .filter((p) => p.id !== product.id && p.category.some((c) => product.category.includes(c)))
     .slice(0, 4);
 
+  const handleAdd = () => {
+    addItem(product, product.sizes[selectedSize].label);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2000);
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <PromoBanner />
@@ -46,9 +57,9 @@ const ProductDetail = () => {
       <CartDrawer />
 
       <main className="flex-1">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 py-10">
           {/* Breadcrumb */}
-          <nav className="text-xs font-body text-muted-foreground mb-6">
+          <nav className="text-xs font-body text-muted-foreground mb-8">
             <Link to="/" className="hover:text-gold transition-colors">Home</Link>
             <span className="mx-2">/</span>
             <Link to="/collections/all" className="hover:text-gold transition-colors">Shop</Link>
@@ -56,23 +67,33 @@ const ProductDetail = () => {
             <span className="text-foreground">{product.title}</span>
           </nav>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20">
             {/* Image */}
-            <div className="aspect-[3/4] bg-secondary overflow-hidden">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6 }}
+              className="aspect-[3/4] bg-secondary overflow-hidden"
+            >
               <img
                 src={product.image}
                 alt={product.title}
                 className="w-full h-full object-cover"
               />
-            </div>
+            </motion.div>
 
             {/* Details */}
-            <div className="flex flex-col py-4">
-              <h1 className="text-3xl sm:text-4xl font-display font-semibold text-foreground mb-2">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="flex flex-col py-4"
+            >
+              <h1 className="text-3xl sm:text-4xl font-display font-semibold text-foreground mb-3">
                 {product.title}
               </h1>
 
-              <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center gap-3 mb-8">
                 <span className="text-2xl font-body font-semibold">${currentPrice.toFixed(2)}</span>
                 {product.compareAtPrice && (
                   <span className="text-lg font-body text-muted-foreground line-through">
@@ -87,7 +108,7 @@ const ProductDetail = () => {
               </div>
 
               {/* Size selector */}
-              <div className="mb-6">
+              <div className="mb-8">
                 <h3 className="text-xs font-body font-semibold uppercase tracking-widest text-muted-foreground mb-3">
                   Size
                 </h3>
@@ -96,7 +117,7 @@ const ProductDetail = () => {
                     <button
                       key={size.label}
                       onClick={() => setSelectedSize(i)}
-                      className={`px-5 py-2 text-sm font-body border transition-colors ${
+                      className={`px-6 py-2.5 text-sm font-body border transition-all ${
                         i === selectedSize
                           ? "border-gold bg-gold text-primary-foreground"
                           : "border-border hover:border-gold"
@@ -110,17 +131,67 @@ const ProductDetail = () => {
 
               {/* Add to Cart */}
               <button
-                onClick={() => addItem(product, product.sizes[selectedSize].label)}
-                className="w-full bg-gold hover:bg-gold-hover text-primary-foreground font-body font-semibold py-4 text-sm uppercase tracking-widest transition-colors mb-6"
+                onClick={handleAdd}
+                className={`w-full font-body font-semibold py-4 text-sm uppercase tracking-widest transition-all mb-8 ${
+                  added
+                    ? "bg-foreground text-background"
+                    : "bg-gold hover:bg-gold-hover text-primary-foreground hover:shadow-lg"
+                }`}
               >
-                Add to Cart — ${currentPrice.toFixed(2)}
+                <AnimatePresence mode="wait">
+                  {added ? (
+                    <motion.span
+                      key="check"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="flex items-center justify-center gap-2"
+                    >
+                      <Check className="w-4 h-4" /> Added to Cart
+                    </motion.span>
+                  ) : (
+                    <motion.span
+                      key="add"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                    >
+                      Add to Cart — ${currentPrice.toFixed(2)}
+                    </motion.span>
+                  )}
+                </AnimatePresence>
               </button>
 
-              {/* Description */}
+              {/* Tabs */}
               <div className="mb-8">
-                <p className="text-sm font-body text-muted-foreground leading-relaxed">
-                  {product.description}
-                </p>
+                <div className="flex border-b border-border">
+                  {tabs.map((tab) => (
+                    <button
+                      key={tab}
+                      onClick={() => setActiveTab(tab)}
+                      className={`px-4 py-3 text-xs font-body font-medium uppercase tracking-wider transition-colors relative ${
+                        activeTab === tab ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      {tab}
+                      {activeTab === tab && (
+                        <motion.div
+                          layoutId="tab-underline"
+                          className="absolute bottom-0 left-0 right-0 h-px bg-gold"
+                        />
+                      )}
+                    </button>
+                  ))}
+                </div>
+                <div className="py-5 text-sm font-body text-muted-foreground leading-relaxed">
+                  {activeTab === "Overview" && <p>{product.description}</p>}
+                  {activeTab === "Materials" && (
+                    <p>Premium 340gsm cotton-poly blend canvas. Archival-quality inks rated 100+ years. Hand-stretched over kiln-dried solid pine stretcher bars. Gallery-wrapped edges.</p>
+                  )}
+                  {activeTab === "Shipping" && (
+                    <p>Free shipping on all orders. Standard delivery 5–7 business days. Each canvas is carefully packaged in a custom box for safe transit. Made to order in the USA.</p>
+                  )}
+                </div>
               </div>
 
               {/* Trust badges */}
@@ -136,13 +207,19 @@ const ProductDetail = () => {
                   </div>
                 ))}
               </div>
-            </div>
+            </motion.div>
           </div>
 
           {/* Related */}
           {related.length > 0 && (
-            <section className="mt-20">
-              <h2 className="text-2xl font-display font-semibold text-foreground mb-8">
+            <motion.section
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="mt-24"
+            >
+              <h2 className="text-2xl sm:text-3xl font-display font-semibold text-foreground mb-10">
                 You May Also Like
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
@@ -150,7 +227,7 @@ const ProductDetail = () => {
                   <ProductCard key={p.id} product={p} />
                 ))}
               </div>
-            </section>
+            </motion.section>
           )}
         </div>
       </main>

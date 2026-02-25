@@ -1,11 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ShoppingBag, Search, Menu, X, ChevronDown } from "lucide-react";
 import { navigation, NavItem, MegaMenuColumn } from "@/data/navigation";
 import { useCart } from "@/stores/cartStore";
+import { motion, AnimatePresence } from "framer-motion";
 
 const MegaMenu = ({ columns }: { columns: MegaMenuColumn[] }) => (
-  <div className="absolute left-0 top-full w-screen bg-background border-b border-border shadow-lg z-50">
+  <motion.div
+    initial={{ opacity: 0, y: -4 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -4 }}
+    transition={{ duration: 0.2 }}
+    className="absolute left-0 top-full w-screen bg-background border-b border-border shadow-lg z-50"
+  >
     <div className="max-w-7xl mx-auto px-8 py-8">
       <div className="grid grid-cols-3 gap-12">
         {columns.map((col) => (
@@ -29,11 +36,17 @@ const MegaMenu = ({ columns }: { columns: MegaMenuColumn[] }) => (
         ))}
       </div>
     </div>
-  </div>
+  </motion.div>
 );
 
 const DropdownMenu = ({ items }: { items: { label: string; slug: string }[] }) => (
-  <div className="absolute left-0 top-full bg-background border border-border shadow-lg z-50 min-w-48 py-2">
+  <motion.div
+    initial={{ opacity: 0, y: -4 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -4 }}
+    transition={{ duration: 0.2 }}
+    className="absolute left-0 top-full bg-background border border-border shadow-lg z-50 min-w-48 py-2"
+  >
     {items.map((item) => (
       <Link
         key={item.slug}
@@ -43,21 +56,33 @@ const DropdownMenu = ({ items }: { items: { label: string; slug: string }[] }) =
         {item.label}
       </Link>
     ))}
-  </div>
+  </motion.div>
 );
 
 const Header = () => {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { toggleCart, totalItems } = useCart();
   const count = totalItems();
 
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 80);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-40 bg-background">
+    <header
+      className={`sticky top-0 z-40 transition-all duration-300 ${
+        scrolled
+          ? "bg-background/95 backdrop-blur-md shadow-sm"
+          : "bg-background"
+      }`}
+    >
       {/* Logo bar */}
       <div className="border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 flex items-center justify-between h-20">
-          {/* Mobile menu */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="lg:hidden p-2"
@@ -66,14 +91,12 @@ const Header = () => {
             {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
 
-          {/* Logo */}
           <Link to="/" className="flex-shrink-0">
             <h1 className="text-2xl sm:text-3xl font-display font-semibold tracking-wide text-charcoal">
               Canvas Culture
             </h1>
           </Link>
 
-          {/* Right icons */}
           <div className="flex items-center gap-4">
             <button aria-label="Search" className="p-2 hover:text-gold transition-colors">
               <Search className="w-5 h-5" />
@@ -85,9 +108,13 @@ const Header = () => {
             >
               <ShoppingBag className="w-5 h-5" />
               {count > 0 && (
-                <span className="absolute -top-1 -right-1 bg-gold text-primary-foreground text-xs w-5 h-5 rounded-full flex items-center justify-center font-body font-semibold">
+                <motion.span
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="absolute -top-1 -right-1 bg-gold text-primary-foreground text-xs w-5 h-5 rounded-full flex items-center justify-center font-body font-semibold"
+                >
                   {count}
-                </span>
+                </motion.span>
               )}
             </button>
           </div>
@@ -114,23 +141,27 @@ const Header = () => {
                 {item.href ? (
                   <Link
                     to={item.href}
-                    className="block px-3 py-3 text-xs font-body font-medium uppercase tracking-widest text-foreground hover:text-gold transition-colors"
+                    className="block px-3 py-3 text-xs font-body font-medium uppercase tracking-widest text-foreground hover:text-gold transition-colors relative group"
                   >
                     {item.label}
+                    <span className="absolute bottom-2 left-3 right-3 h-px bg-gold scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
                   </Link>
                 ) : (
-                  <button className="flex items-center gap-1 px-3 py-3 text-xs font-body font-medium uppercase tracking-widest text-foreground hover:text-gold transition-colors">
+                  <button className="flex items-center gap-1 px-3 py-3 text-xs font-body font-medium uppercase tracking-widest text-foreground hover:text-gold transition-colors relative group">
                     {item.label}
                     <ChevronDown className="w-3 h-3" />
+                    <span className="absolute bottom-2 left-3 right-3 h-px bg-gold scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
                   </button>
                 )}
 
-                {activeMenu === item.label && item.megaMenu && (
-                  <MegaMenu columns={item.megaMenu} />
-                )}
-                {activeMenu === item.label && item.dropdown && (
-                  <DropdownMenu items={item.dropdown} />
-                )}
+                <AnimatePresence>
+                  {activeMenu === item.label && item.megaMenu && (
+                    <MegaMenu columns={item.megaMenu} />
+                  )}
+                  {activeMenu === item.label && item.dropdown && (
+                    <DropdownMenu items={item.dropdown} />
+                  )}
+                </AnimatePresence>
               </li>
             ))}
           </ul>
@@ -138,15 +169,22 @@ const Header = () => {
       </nav>
 
       {/* Mobile nav */}
-      {mobileOpen && (
-        <div className="lg:hidden bg-background border-b border-border max-h-[70vh] overflow-y-auto">
-          <nav className="px-4 py-4">
-            {navigation.map((item) => (
-              <MobileNavItem key={item.label} item={item} onClose={() => setMobileOpen(false)} />
-            ))}
-          </nav>
-        </div>
-      )}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="lg:hidden bg-background border-b border-border overflow-hidden"
+          >
+            <nav className="px-4 py-4">
+              {navigation.map((item) => (
+                <MobileNavItem key={item.label} item={item} onClose={() => setMobileOpen(false)} />
+              ))}
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 };
@@ -178,20 +216,29 @@ const MobileNavItem = ({ item, onClose }: { item: NavItem; onClose: () => void }
         {item.label}
         <ChevronDown className={`w-4 h-4 transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
-      {open && (
-        <div className="pb-3 pl-4 space-y-2">
-          {links.map((link) => (
-            <Link
-              key={link.slug}
-              to={`/collections/${link.slug}`}
-              onClick={onClose}
-              className="block py-1 text-sm font-body text-muted-foreground hover:text-gold"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-      )}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="overflow-hidden"
+          >
+            <div className="pb-3 pl-4 space-y-2">
+              {links.map((link) => (
+                <Link
+                  key={link.slug}
+                  to={`/collections/${link.slug}`}
+                  onClick={onClose}
+                  className="block py-1 text-sm font-body text-muted-foreground hover:text-gold"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

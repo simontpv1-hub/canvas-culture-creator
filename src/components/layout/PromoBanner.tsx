@@ -1,11 +1,22 @@
-import { Link } from "react-router-dom";
+const items = [
+  "🖼️ BUY 3 GET THE 4TH FREE — Code: BUY3GET1",
+  "🚚 FREE SHIPPING OVER $75",
+  "🇺🇸 HAND-MADE IN USA",
+  "↩️ 30-DAY RETURNS",
+];
 
 const PromoBanner = () => (
-  <div className="bg-charcoal py-2 px-4 text-center">
-    <p className="text-sm font-body tracking-wide text-primary-foreground">
-      <span className="font-semibold">BUY 3 GET THE 4TH FREE!</span> Use Code:{" "}
-      <span className="font-semibold text-gold">BUY3GET1</span> | Free Shipping on Orders Over $75
-    </p>
+  <div className="bg-charcoal py-2.5 overflow-hidden">
+    <div className="animate-marquee flex whitespace-nowrap">
+      {[...items, ...items, ...items, ...items].map((text, i) => (
+        <span
+          key={i}
+          className="mx-8 text-xs font-body tracking-wider text-primary-foreground"
+        >
+          {text}
+        </span>
+      ))}
+    </div>
   </div>
 );
 
