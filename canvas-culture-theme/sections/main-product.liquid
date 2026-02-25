@@ -1,0 +1,83 @@
+<div class="container">
+  <div class="product-detail">
+    <!-- Gallery -->
+    <div class="product-gallery reveal">
+      <div class="product-main-image">
+        <img data-main-image src="{{ product.featured_image | image_url: width: 1200 }}" alt="{{ product.title }}">
+      </div>
+      <div class="product-thumbs">
+        {%- for image in product.images limit: 4 -%}
+          <button data-thumbnail="{{ image | image_url: width: 1200 }}" class="{% if forloop.first %}active{% endif %}">
+            <img src="{{ image | image_url: width: 200 }}" alt="{{ product.title }} {{ forloop.index }}">
+          </button>
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <!-- Info -->
+    <div class="product-info reveal">
+      <h1>{{ product.title }}</h1>
+      <div class="product-price-row">
+        <span class="price" data-current-price>{{ product.selected_or_first_available_variant.price | money }}</span>
+        {%- if product.compare_at_price > product.price -%}
+          <span class="compare">{{ product.compare_at_price | money }}</span>
+        {%- endif -%}
+      </div>
+
+      {%- if product.variants.size > 1 -%}
+        <div class="size-options">
+          {%- for variant in product.variants -%}
+            <button class="size-btn {% if forloop.first %}active{% endif %}" data-size-option data-variant-id="{{ variant.id }}" data-price="{{ variant.price | money_without_currency }}">
+              {{ variant.title }}
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      <button class="btn btn-gold btn-shimmer product-add-btn" data-add-to-cart data-variant-id="{{ product.selected_or_first_available_variant.id }}">
+        Add to Cart
+      </button>
+
+      <div class="product-trust-row">
+        <span class="product-trust-item">🇺🇸 Made in USA</span>
+        <span class="product-trust-item">↩️ 30-Day Returns</span>
+        <span class="product-trust-item">🚚 Free Shipping</span>
+      </div>
+
+      <div class="product-tabs" data-tabs>
+        <div class="tab-buttons">
+          <button class="tab-btn active" data-tab-btn="overview">Overview</button>
+          <button class="tab-btn" data-tab-btn="materials">Materials</button>
+          <button class="tab-btn" data-tab-btn="shipping">Shipping</button>
+        </div>
+        <div class="tab-panel active" data-tab-panel="overview">{{ product.description }}</div>
+        <div class="tab-panel" data-tab-panel="materials">
+          <p>Premium cotton-poly blend canvas, hand-stretched over kiln-dried solid pine bars. Printed with archival-quality pigment inks rated to last 75+ years without fading. Gallery-wrapped edges. Ready to hang hardware included.</p>
+        </div>
+        <div class="tab-panel" data-tab-panel="shipping">
+          <p>Free shipping on all orders. Standard delivery: 5–7 business days. Express: 2–3 business days. 30-day return policy — if you're not happy, we'll make it right.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%- if collection -%}
+    <section class="section-padding">
+      <div class="section-heading"><h2>You May Also Like</h2></div>
+      <div class="product-grid stagger-children">
+        {%- for rec in collection.products limit: 4 -%}
+          {%- unless rec.id == product.id -%}
+            <div class="reveal">{% render 'product-card', product: rec %}</div>
+          {%- endunless -%}
+        {%- endfor -%}
+      </div>
+    </section>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Product Page",
+  "settings": []
+}
+{% endschema %}

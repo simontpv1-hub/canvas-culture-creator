@@ -1,0 +1,99 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Canvas Culture",
+    "theme_version": "1.0.0",
+    "theme_author": "Canvas Culture",
+    "theme_documentation_url": "",
+    "theme_support_url": ""
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_gold",
+        "label": "Gold Accent",
+        "default": "#C9A84C"
+      },
+      {
+        "type": "color",
+        "id": "color_gold_hover",
+        "label": "Gold Hover",
+        "default": "#b8953e"
+      },
+      {
+        "type": "color",
+        "id": "color_charcoal",
+        "label": "Charcoal",
+        "default": "#1A1A1A"
+      },
+      {
+        "type": "color",
+        "id": "color_off_white",
+        "label": "Off White",
+        "default": "#FAF9F7"
+      },
+      {
+        "type": "color",
+        "id": "color_border",
+        "label": "Border",
+        "default": "#E8E4DE"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "font_display",
+        "label": "Display Font",
+        "default": "cormorant_garamond_n6"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_body",
+        "label": "Body Font",
+        "default": "dm_sans_n4"
+      }
+    ]
+  },
+  {
+    "name": "Promo Banner",
+    "settings": [
+      {
+        "type": "text",
+        "id": "promo_text",
+        "label": "Promo Banner Text",
+        "default": "🖼️ BUY 3 GET 4TH FREE — BUY3GET1 · 🚚 FREE SHIPPING OVER $75 · 🇺🇸 HAND-MADE IN USA · ↩️ 30-DAY RETURNS · ⭐ 10,000+ HAPPY CUSTOMERS"
+      }
+    ]
+  },
+  {
+    "name": "Welcome Popup",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_popup",
+        "label": "Show welcome popup",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "popup_discount",
+        "label": "Popup Discount Code",
+        "default": "WELCOME15"
+      },
+      {
+        "type": "range",
+        "id": "popup_discount_percent",
+        "label": "Popup Discount Percentage",
+        "min": 5,
+        "max": 50,
+        "step": 5,
+        "default": 15
+      }
+    ]
+  }
+]

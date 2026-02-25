@@ -1,0 +1,40 @@
+<div class="container">
+  <div class="collection-hero reveal">
+    <h1>{{ collection.title }}</h1>
+    <p class="collection-count">{{ collection.products_count }} products</p>
+  </div>
+
+  <div class="filter-bar">
+    <div></div>
+    <select class="sort-select" onchange="window.location.href=this.value">
+      {%- for option in collection.sort_options -%}
+        <option value="{{ collection.url }}?sort_by={{ option.value }}" {% if collection.sort_by == option.value %}selected{% endif %}>
+          {{ option.name }}
+        </option>
+      {%- endfor -%}
+    </select>
+  </div>
+
+  <div class="product-grid stagger-children">
+    {%- paginate collection.products by 24 -%}
+      {%- for product in collection.products -%}
+        <div class="reveal">
+          {% render 'product-card', product: product %}
+        </div>
+      {%- endfor -%}
+
+      {%- if paginate.next -%}
+        <div class="load-more-wrap" style="grid-column:1/-1;">
+          <a href="{{ paginate.next.url }}" class="btn btn-gold">Load More</a>
+        </div>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collection Grid",
+  "settings": []
+}
+{% endschema %}

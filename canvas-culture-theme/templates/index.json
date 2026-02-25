@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "hero": { "type": "hero-slideshow", "settings": {} },
+    "trust": { "type": "trust-badges", "settings": {} },
+    "featured": { "type": "featured-collections", "settings": {} },
+    "story": { "type": "brand-story", "settings": {} },
+    "best-sellers": { "type": "product-carousel", "settings": { "title": "Our Best Sellers" } },
+    "custom-cta": { "type": "custom-canvas-cta", "settings": {} },
+    "popular": { "type": "popular-categories", "settings": {} },
+    "trending": { "type": "product-carousel", "settings": { "title": "Trending This Week" } },
+    "newsletter": { "type": "newsletter", "settings": {} }
+  },
+  "order": ["hero","trust","featured","story","best-sellers","custom-cta","popular","trending","newsletter"]
+}

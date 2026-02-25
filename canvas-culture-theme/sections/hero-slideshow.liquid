@@ -1,0 +1,69 @@
+<div class="hero grain">
+  {%- for block in section.blocks -%}
+    <div class="hero-slide {% if forloop.first %}active{% endif %}" {{ block.shopify_attributes }}>
+      {%- if block.settings.image -%}
+        <img src="{{ block.settings.image | image_url: width: 1920 }}" alt="{{ block.settings.image.alt | default: shop.name }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+      {%- else -%}
+        <div style="width:100%;height:100%;background:var(--color-charcoal);"></div>
+      {%- endif -%}
+      <div class="hero-overlay"></div>
+    </div>
+  {%- endfor -%}
+
+  <div class="hero-content">
+    <div class="hero-content-inner">
+      <p class="hero-pretitle reveal">— {{ section.settings.pretitle | default: 'Canvas Culture' }} —</p>
+      <h2 class="hero-title reveal" style="transition-delay:0.15s">{{ section.settings.heading | default: 'Art That Belongs On Your Walls.' }}</h2>
+      <p class="hero-subtitle reveal" style="transition-delay:0.3s">{{ section.settings.subtitle | default: 'Museum-quality canvas prints. Curated for real homes. Hand-made in the USA. Free shipping. 30-day guarantee.' }}</p>
+      <div class="hero-ctas reveal" style="transition-delay:0.45s">
+        <a href="{{ section.settings.cta1_link | default: '/collections/all' }}" class="btn btn-gold btn-shimmer">
+          {{ section.settings.cta1_text | default: 'Shop All Prints' }}
+        </a>
+        <a href="{{ section.settings.cta2_link | default: '/collections/best-sellers' }}" class="btn btn-ghost">
+          {{ section.settings.cta2_text | default: 'Explore Collections' }}
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="scroll-chevron">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m6 9 6 6 6-6"/>
+    </svg>
+  </div>
+
+  <!-- Dots -->
+  {%- if section.blocks.size > 1 -%}
+    <div class="hero-dots">
+      {%- for block in section.blocks -%}
+        <button class="hero-dot {% if forloop.first %}active{% endif %}" aria-label="Slide {{ forloop.index }}"></button>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Hero Slideshow",
+  "settings": [
+    { "type": "text", "id": "pretitle", "label": "Pre-title", "default": "Canvas Culture" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Art That Belongs On Your Walls." },
+    { "type": "textarea", "id": "subtitle", "label": "Subtitle", "default": "Museum-quality canvas prints. Curated for real homes. Hand-made in the USA. Free shipping. 30-day guarantee." },
+    { "type": "text", "id": "cta1_text", "label": "CTA 1 Text", "default": "Shop All Prints" },
+    { "type": "url", "id": "cta1_link", "label": "CTA 1 Link" },
+    { "type": "text", "id": "cta2_text", "label": "CTA 2 Text", "default": "Explore Collections" },
+    { "type": "url", "id": "cta2_link", "label": "CTA 2 Link" }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Hero Slideshow", "blocks": [{ "type": "slide" }, { "type": "slide" }] }]
+}
+{% endschema %}

@@ -1,0 +1,351 @@
+<header class="site-header border-b" style="border-color: var(--color-border);">
+  <!-- Logo Bar -->
+  <div style="border-bottom: 1px solid var(--color-border);">
+    <div class="container">
+      <div class="header-bar">
+        <!-- Mobile Toggle -->
+        <button class="mobile-toggle" data-mobile-toggle aria-label="Menu">
+          <svg data-mobile-icon width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/>
+          </svg>
+        </button>
+
+        <!-- Logo -->
+        <a href="/" class="logo">Canvas Culture</a>
+
+        <!-- Icons -->
+        <div class="header-icons">
+          <a href="/search" aria-label="Search" style="padding:0.5rem;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+            </svg>
+          </a>
+          <button data-open-cart aria-label="Cart" style="position:relative;padding:0.5rem;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+            <span data-cart-count class="cart-count" style="{% if cart.item_count == 0 %}display:none{% endif %}">{{ cart.item_count }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Desktop Navigation -->
+  <nav class="desktop-nav border-b" style="border-color: var(--color-border);">
+    <div class="container">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/collections/all">Shop All</a></li>
+        <li><a href="/collections/new-releases">New Releases</a></li>
+
+        <!-- Best Sellers -->
+        <li data-nav-item>
+          <button class="nav-btn">
+            Best Sellers
+            <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="mega-menu">
+            <div class="mega-menu-inner">
+              <div class="mega-menu-col">
+                <h3>Best Selling Subjects</h3>
+                <ul>
+                  <li><a href="/collections/cultural-icons">Cultural Icons</a></li>
+                  <li><a href="/collections/music">Music</a></li>
+                  <li><a href="/collections/movies-tv">Movies & TV</a></li>
+                  <li><a href="/collections/cars">Cars</a></li>
+                  <li><a href="/collections/christianity">Christianity</a></li>
+                  <li><a href="/collections/history">History</a></li>
+                </ul>
+              </div>
+              <div class="mega-menu-col">
+                <h3>Best Selling Styles</h3>
+                <ul>
+                  <li><a href="/collections/beach-coastal">Beach & Coastal</a></li>
+                  <li><a href="/collections/vintage-art">Vintage Art</a></li>
+                  <li><a href="/collections/landscapes">Landscapes</a></li>
+                  <li><a href="/collections/floral-garden">Floral & Garden</a></li>
+                </ul>
+              </div>
+              <div class="mega-menu-col">
+                <h3>Best Selling Artists</h3>
+                <ul>
+                  <li><a href="/collections/ansel-adams">Ansel Adams</a></li>
+                  <li><a href="/collections/claude-monet">Claude Monet</a></li>
+                  <li><a href="/collections/vincent-van-gogh">Vincent Van Gogh</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <!-- Subjects -->
+        <li data-nav-item>
+          <button class="nav-btn">
+            Subjects
+            <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="mega-menu">
+            <div class="mega-menu-inner">
+              <div class="mega-menu-col">
+                <h3>Trending</h3>
+                <ul>
+                  <li><a href="/collections/cultural-icons">Cultural Icons</a></li>
+                  <li><a href="/collections/movies-tv">Movies & TV</a></li>
+                  <li><a href="/collections/music">Music</a></li>
+                  <li><a href="/collections/trendy-art">Trendy Art</a></li>
+                </ul>
+              </div>
+              <div class="mega-menu-col">
+                <h3>Popular</h3>
+                <ul>
+                  <li><a href="/collections/animals">Animals</a></li>
+                  <li><a href="/collections/cars">Cars</a></li>
+                  <li><a href="/collections/sports">Sports</a></li>
+                  <li><a href="/collections/vintage-art">Vintage Art</a></li>
+                </ul>
+              </div>
+              <div class="mega-menu-col">
+                <h3>Best Sellers</h3>
+                <ul>
+                  <li><a href="/collections/christianity">Christianity</a></li>
+                  <li><a href="/collections/dogs">Dogs</a></li>
+                  <li><a href="/collections/history">History</a></li>
+                  <li><a href="/collections/horses">Horses</a></li>
+                  <li><a href="/collections/smoking">Smoking & Cigars</a></li>
+                  <li><a href="/collections/bar-decor">Bar Decor</a></li>
+                  <li><a href="/collections/bathroom">Bathroom</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <!-- Styles -->
+        <li data-nav-item>
+          <button class="nav-btn">
+            Styles
+            <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="mega-menu">
+            <div class="mega-menu-inner">
+              <div class="mega-menu-col">
+                <h3>Popular</h3>
+                <ul>
+                  <li><a href="/collections/beach-coastal">Beach & Coastal</a></li>
+                  <li><a href="/collections/farmhouse">Farmhouse</a></li>
+                  <li><a href="/collections/vintage">Vintage</a></li>
+                  <li><a href="/collections/western">Western</a></li>
+                </ul>
+              </div>
+              <div class="mega-menu-col">
+                <h3>Decor Styles</h3>
+                <ul>
+                  <li><a href="/collections/forests-cabins">Forests & Cabins</a></li>
+                  <li><a href="/collections/floral-garden">Floral & Garden</a></li>
+                  <li><a href="/collections/landscapes">Landscapes</a></li>
+                  <li><a href="/collections/seascapes">Seascapes</a></li>
+                </ul>
+              </div>
+              <div class="mega-menu-col">
+                <h3>Art Styles</h3>
+                <ul>
+                  <li><a href="/collections/abstract">Abstract</a></li>
+                  <li><a href="/collections/impressionism">Impressionism</a></li>
+                  <li><a href="/collections/modern">Modern</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <!-- Rooms -->
+        <li data-nav-item>
+          <button class="nav-btn">
+            Rooms
+            <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="dropdown-menu">
+            <a href="/collections/bathroom">Bathroom</a>
+            <a href="/collections/bedroom">Bedroom</a>
+            <a href="/collections/dining-room">Dining Room</a>
+            <a href="/collections/kitchen">Kitchen</a>
+            <a href="/collections/living-room">Living Room</a>
+            <a href="/collections/man-cave">Man Cave</a>
+          </div>
+        </li>
+
+        <!-- Colors -->
+        <li data-nav-item>
+          <button class="nav-btn">
+            Colors
+            <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="mega-menu">
+            <div class="mega-menu-inner">
+              <div class="mega-menu-col">
+                <h3>Main Colors</h3>
+                <ul>
+                  <li><a href="/collections/blue">Blue</a></li>
+                  <li><a href="/collections/green">Green</a></li>
+                  <li><a href="/collections/red">Red</a></li>
+                  <li><a href="/collections/yellow">Yellow</a></li>
+                </ul>
+              </div>
+              <div class="mega-menu-col">
+                <h3>Trending</h3>
+                <ul>
+                  <li><a href="/collections/beige">Beige</a></li>
+                  <li><a href="/collections/orange">Orange</a></li>
+                  <li><a href="/collections/purple">Purple</a></li>
+                </ul>
+              </div>
+              <div class="mega-menu-col">
+                <h3>Blacks & Whites</h3>
+                <ul>
+                  <li><a href="/collections/black">Black</a></li>
+                  <li><a href="/collections/white">White</a></li>
+                  <li><a href="/collections/black-and-white">Black & White</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <!-- Artists -->
+        <li data-nav-item>
+          <button class="nav-btn">
+            Artists
+            <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="dropdown-menu">
+            <a href="/collections/ansel-adams">Ansel Adams</a>
+            <a href="/collections/caravaggio">Caravaggio</a>
+            <a href="/collections/claude-monet">Claude Monet</a>
+            <a href="/collections/edgar-degas">Edgar Degas</a>
+            <a href="/collections/eugene-delacroix">Eugène Delacroix</a>
+            <a href="/collections/renoir">Pierre-Auguste Renoir</a>
+            <a href="/collections/vincent-van-gogh">Vincent Van Gogh</a>
+          </div>
+        </li>
+
+        <!-- About -->
+        <li><a href="/pages/about">About Us</a></li>
+
+        <!-- Help -->
+        <li data-nav-item>
+          <button class="nav-btn">
+            Help
+            <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="dropdown-menu">
+            <a href="/pages/shipping-returns">Shipping & Returns</a>
+            <a href="/pages/faq">FAQ</a>
+            <a href="/pages/contact">Contact Us</a>
+            <a href="/pages/size-guide">Size Guide</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Mobile Navigation -->
+  <div class="mobile-nav">
+    <div class="mobile-nav-item"><a href="/" class="mobile-nav-link">Home</a></div>
+    <div class="mobile-nav-item"><a href="/collections/all" class="mobile-nav-link">Shop All</a></div>
+    <div class="mobile-nav-item"><a href="/collections/new-releases" class="mobile-nav-link">New Releases</a></div>
+
+    <div class="mobile-nav-item">
+      <button class="mobile-nav-toggle" data-mobile-nav-toggle="mob-best-sellers">
+        Best Sellers
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div id="mob-best-sellers" class="mobile-subnav">
+        <a href="/collections/cultural-icons">Cultural Icons</a>
+        <a href="/collections/music">Music</a>
+        <a href="/collections/cars">Cars</a>
+        <a href="/collections/christianity">Christianity</a>
+        <a href="/collections/history">History</a>
+        <a href="/collections/vintage-art">Vintage Art</a>
+        <a href="/collections/landscapes">Landscapes</a>
+        <a href="/collections/ansel-adams">Ansel Adams</a>
+      </div>
+    </div>
+
+    <div class="mobile-nav-item">
+      <button class="mobile-nav-toggle" data-mobile-nav-toggle="mob-subjects">
+        Subjects
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div id="mob-subjects" class="mobile-subnav">
+        <a href="/collections/cultural-icons">Cultural Icons</a>
+        <a href="/collections/movies-tv">Movies & TV</a>
+        <a href="/collections/music">Music</a>
+        <a href="/collections/animals">Animals</a>
+        <a href="/collections/cars">Cars</a>
+        <a href="/collections/christianity">Christianity</a>
+        <a href="/collections/dogs">Dogs</a>
+        <a href="/collections/history">History</a>
+        <a href="/collections/smoking">Smoking & Cigars</a>
+        <a href="/collections/bar-decor">Bar Decor</a>
+        <a href="/collections/bathroom">Bathroom</a>
+      </div>
+    </div>
+
+    <div class="mobile-nav-item">
+      <button class="mobile-nav-toggle" data-mobile-nav-toggle="mob-styles">
+        Styles
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div id="mob-styles" class="mobile-subnav">
+        <a href="/collections/beach-coastal">Beach & Coastal</a>
+        <a href="/collections/farmhouse">Farmhouse</a>
+        <a href="/collections/vintage">Vintage</a>
+        <a href="/collections/landscapes">Landscapes</a>
+        <a href="/collections/abstract">Abstract</a>
+        <a href="/collections/impressionism">Impressionism</a>
+        <a href="/collections/modern">Modern</a>
+      </div>
+    </div>
+
+    <div class="mobile-nav-item">
+      <button class="mobile-nav-toggle" data-mobile-nav-toggle="mob-rooms">
+        Rooms
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div id="mob-rooms" class="mobile-subnav">
+        <a href="/collections/bathroom">Bathroom</a>
+        <a href="/collections/bedroom">Bedroom</a>
+        <a href="/collections/living-room">Living Room</a>
+        <a href="/collections/man-cave">Man Cave</a>
+      </div>
+    </div>
+
+    <div class="mobile-nav-item">
+      <button class="mobile-nav-toggle" data-mobile-nav-toggle="mob-artists">
+        Artists
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div id="mob-artists" class="mobile-subnav">
+        <a href="/collections/ansel-adams">Ansel Adams</a>
+        <a href="/collections/claude-monet">Claude Monet</a>
+        <a href="/collections/vincent-van-gogh">Vincent Van Gogh</a>
+        <a href="/collections/caravaggio">Caravaggio</a>
+        <a href="/collections/edgar-degas">Edgar Degas</a>
+        <a href="/collections/renoir">Renoir</a>
+      </div>
+    </div>
+
+    <div class="mobile-nav-item"><a href="/pages/about" class="mobile-nav-link">About Us</a></div>
+    <div class="mobile-nav-item"><a href="/pages/shipping-returns" class="mobile-nav-link">Shipping & Returns</a></div>
+    <div class="mobile-nav-item"><a href="/pages/faq" class="mobile-nav-link">FAQ</a></div>
+    <div class="mobile-nav-item"><a href="/pages/contact" class="mobile-nav-link">Contact Us</a></div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": []
+}
+{% endschema %}

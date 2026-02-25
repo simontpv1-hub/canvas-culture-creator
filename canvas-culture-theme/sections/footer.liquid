@@ -1,0 +1,53 @@
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h3 class="font-display">Canvas Culture</h3>
+        <p>Premium canvas art prints, hand-made in the USA. Curated collections that transform your space.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="/collections/new-releases">New Releases</a></li>
+          <li><a href="/collections/best-sellers">Best Sellers</a></li>
+          <li><a href="/collections/all">All Products</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Help</h4>
+        <ul>
+          <li><a href="/pages/shipping-returns">Shipping & Returns</a></li>
+          <li><a href="/pages/faq">FAQ</a></li>
+          <li><a href="/pages/contact">Contact Us</a></li>
+          <li><a href="/pages/size-guide">Size Guide</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <ul>
+          {%- if settings.social_instagram_link -%}<li><a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener">Instagram</a></li>{%- endif -%}
+          {%- if settings.social_pinterest_link -%}<li><a href="{{ settings.social_pinterest_link }}" target="_blank" rel="noopener">Pinterest</a></li>{%- endif -%}
+          {%- if settings.social_facebook_link -%}<li><a href="{{ settings.social_facebook_link }}" target="_blank" rel="noopener">Facebook</a></li>{%- endif -%}
+          {%- if settings.social_twitter_link -%}<li><a href="{{ settings.social_twitter_link }}" target="_blank" rel="noopener">Twitter</a></li>{%- endif -%}
+          {%- comment -%}Fallback if no social links configured{%- endcomment -%}
+          {%- unless settings.social_instagram_link or settings.social_pinterest_link or settings.social_facebook_link or settings.social_twitter_link -%}
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">Pinterest</a></li>
+            <li><a href="#">Facebook</a></li>
+            <li><a href="#">Twitter</a></li>
+          {%- endunless -%}
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": []
+}
+{% endschema %}
