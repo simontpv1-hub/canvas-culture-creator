@@ -15,19 +15,19 @@ const MegaMenu = ({ columns }: { columns: MegaMenuColumn[] }) => (
     className="fixed left-0 right-0 bg-background border-b border-border shadow-lg z-50 max-h-[80vh] overflow-y-auto"
     style={{ top: "var(--header-bottom, 120px)" }}
   >
-    <div className="max-w-7xl mx-auto px-8 py-8">
-      <div className="grid grid-cols-3 gap-12">
+    <div className="max-w-7xl mx-auto px-10 py-10">
+      <div className="grid grid-cols-3 gap-16">
         {columns.map((col) => (
           <div key={col.heading}>
-            <h3 className="text-xs font-body font-semibold uppercase tracking-widest text-muted-foreground mb-4">
+            <h3 className="font-body font-semibold uppercase text-gold mb-5" style={{ fontSize: "10px", letterSpacing: "0.12em" }}>
               {col.heading}
             </h3>
-            <ul className="space-y-2">
+            <ul className="space-y-0">
               {col.links.map((link) => (
                 <li key={link.slug}>
                   <Link
                     to={`/collections/${link.slug}`}
-                    className="text-sm font-body text-foreground hover:text-gold transition-colors"
+                    className="block py-2 text-sm font-body text-foreground hover:text-gold transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -68,7 +68,7 @@ const DropdownMenu = ({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -6 }}
       transition={{ duration: 0.25, ease: "easeOut" }}
-      className="fixed bg-background border border-border shadow-lg z-50 min-w-[200px] py-2 max-h-[80vh] overflow-y-auto"
+      className="fixed bg-background border border-border shadow-lg z-50 min-w-[220px] py-3 max-h-[80vh] overflow-y-auto"
       style={{ top: "var(--header-bottom, 120px)", left: pos.left, maxWidth: "calc(100vw - 20px)" }}
     >
       {items.map((item) => (
@@ -140,7 +140,7 @@ const Header = () => {
     >
       {/* Logo bar */}
       <div className="border-b border-border">
-        <div className={`max-w-7xl mx-auto px-4 sm:px-8 flex items-center justify-between transition-all duration-300 ${scrolled ? "h-14" : "h-20"}`}>
+        <div className={`max-w-7xl mx-auto px-4 sm:px-8 flex items-center justify-between transition-all duration-300 ${scrolled ? "h-16" : "h-[88px]"}`}>
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="lg:hidden p-2 active:scale-95"
@@ -150,7 +150,7 @@ const Header = () => {
           </button>
 
           <Link to="/" className="flex-shrink-0">
-            <h1 className={`font-display font-semibold tracking-wide text-charcoal transition-all duration-300 ${scrolled ? "text-xl sm:text-2xl" : "text-2xl sm:text-3xl"}`}>
+            <h1 className={`font-display font-semibold tracking-wide text-charcoal transition-all duration-300 ${scrolled ? "text-2xl sm:text-[26px]" : "text-[28px] sm:text-[34px]"}`}>
               Canvas Culture
             </h1>
           </Link>
@@ -186,7 +186,7 @@ const Header = () => {
         onMouseLeave={() => setActiveMenu(null)}
       >
         <div className="max-w-7xl mx-auto px-8">
-          <ul className="flex items-center justify-center gap-1">
+          <ul className="flex items-center justify-center" style={{ gap: "36px" }}>
             {navigation.map((item) => (
               <li
                 key={item.label}
@@ -203,16 +203,20 @@ const Header = () => {
                 {item.href ? (
                   <Link
                     to={item.href}
-                    className="block px-3 py-3 text-xs font-body font-medium uppercase tracking-widest text-foreground hover:text-gold transition-colors relative group"
+                    className="block py-[18px] font-body font-medium uppercase text-foreground hover:text-gold transition-colors relative group"
+                    style={{ fontSize: "13px", letterSpacing: "0.08em" }}
                   >
                     {item.label}
-                    <span className="absolute bottom-2 left-3 right-3 h-px bg-gold scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-300" />
+                    <span className="absolute bottom-3 left-0 right-0 h-px bg-gold scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-300" />
                   </Link>
                 ) : (
-                  <button className="flex items-center gap-1 px-3 py-3 text-xs font-body font-medium uppercase tracking-widest text-foreground hover:text-gold transition-colors relative group">
+                  <button
+                    className="flex items-center gap-1.5 py-[18px] font-body font-medium uppercase text-foreground hover:text-gold transition-colors relative group"
+                    style={{ fontSize: "13px", letterSpacing: "0.08em" }}
+                  >
                     {item.label}
-                    <ChevronDown className="w-3 h-3" />
-                    <span className="absolute bottom-2 left-3 right-3 h-px bg-gold scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-300" />
+                    <ChevronDown className="w-2.5 h-2.5 opacity-40" />
+                    <span className="absolute bottom-3 left-0 right-0 h-px bg-gold scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-300" />
                   </button>
                 )}
 
