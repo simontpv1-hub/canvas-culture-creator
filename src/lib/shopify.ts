@@ -282,17 +282,16 @@ export function normalizeCollection(node: any): ShopifyCollection {
 // SHOPIFY TAG REFERENCE — add these exact tags in merchOne when publishing:
 //
 // MOOD & STYLE:
-// dark-gloomy | aesthetic-art | modern-monochrome | stockholm-design
+// dark-gloomy | aesthetic-art | modern-monochrome | stockholm-design | beach-house
 //
 // CULTURE:
-// movie-posters | movie-posters-1950s | movie-posters-1960s | movie-posters-1970s | movie-posters-1980s | movie-posters-1990s
-// the-new-yorker | vintage-travel | cars
+// the-new-yorker | travel | cars
+//
+// MOVIE POSTERS:
+// movie-posters-1950s | movie-posters-1960s | movie-posters-1970s | movie-posters-1980s | movie-posters-1990s
 //
 // SPACES:
-// bathroom-humor | bar-prints | kitchen-prints | beach-house
-//
-// ROOMS:
-// room-bathroom | room-bedroom | room-kitchen | room-living-room | room-man-cave | room-dining-room
+// bar | kitchen | bathroom | bedroom | living-room
 //
 // ARTISTS:
 // artist-monet | artist-van-gogh | artist-ansel-adams | artist-keith-haring | artist-yayoi-kusama | artist-henri-matisse | artist-picasso
