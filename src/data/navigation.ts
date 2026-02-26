@@ -14,101 +14,35 @@ export const navigation: NavItem[] = [
   { label: "Home", href: "/" },
   { label: "Shop All", href: "/collections/all" },
   { label: "New Releases", href: "/collections/new-releases" },
+  { label: "Best Sellers", href: "/collections/best-sellers" },
   {
-    label: "Best Sellers",
+    label: "Collections",
     megaMenu: [
       {
-        heading: "Best Selling Subjects",
+        heading: "Mood & Style",
         links: [
-          { label: "Cultural Icons", slug: "cultural-icons" },
-          { label: "Music", slug: "music" },
-          { label: "Movies & TV", slug: "movies-tv" },
+          { label: "Dark & Gloomy", slug: "dark-gloomy" },
+          { label: "Aesthetic Art", slug: "aesthetic-art" },
+          { label: "Modern Monochrome", slug: "modern-monochrome" },
+          { label: "Stockholm Design", slug: "stockholm-design" },
+        ],
+      },
+      {
+        heading: "Culture",
+        links: [
+          { label: "Movie Posters", slug: "movie-posters" },
+          { label: "The New Yorker", slug: "the-new-yorker" },
+          { label: "Vintage Travel", slug: "vintage-travel" },
           { label: "Cars", slug: "cars" },
-          { label: "Christianity", slug: "christianity" },
-          { label: "History", slug: "history" },
         ],
       },
       {
-        heading: "Best Selling Styles",
+        heading: "Spaces",
         links: [
-          { label: "Beach & Coastal", slug: "beach-coastal" },
-          { label: "Vintage Art", slug: "vintage-art" },
-          { label: "Landscapes", slug: "landscapes" },
-          { label: "Floral & Garden", slug: "floral-garden" },
-        ],
-      },
-      {
-        heading: "Best Selling Artists",
-        links: [
-          { label: "Ansel Adams", slug: "ansel-adams" },
-          { label: "Claude Monet", slug: "monet" },
-          { label: "Vincent Van Gogh", slug: "van-gogh" },
-        ],
-      },
-    ],
-  },
-  {
-    label: "Subjects",
-    megaMenu: [
-      {
-        heading: "Trending",
-        links: [
-          { label: "Cultural Icons", slug: "cultural-icons" },
-          { label: "Movies & TV", slug: "movies-tv" },
-          { label: "Music", slug: "music" },
-          { label: "Trendy Art", slug: "trendy-art" },
-        ],
-      },
-      {
-        heading: "Popular",
-        links: [
-          { label: "Animals", slug: "animals" },
-          { label: "Cars", slug: "cars" },
-          { label: "Sports", slug: "sports" },
-          { label: "Vintage Art", slug: "vintage-art" },
-        ],
-      },
-      {
-        heading: "Best Sellers",
-        links: [
-          { label: "Christianity", slug: "christianity" },
-          { label: "Dogs", slug: "dogs" },
-          { label: "History", slug: "history" },
-          { label: "Horses", slug: "horses" },
-          { label: "Smoking & Cigars", slug: "smoking" },
-          { label: "Bar Decor", slug: "bar-decor" },
-          { label: "Bathroom", slug: "bathroom" },
-        ],
-      },
-    ],
-  },
-  {
-    label: "Styles",
-    megaMenu: [
-      {
-        heading: "Popular",
-        links: [
-          { label: "Beach & Coastal", slug: "beach-coastal" },
-          { label: "Farmhouse", slug: "farmhouse" },
-          { label: "Vintage", slug: "vintage-art" },
-          { label: "Western", slug: "western" },
-        ],
-      },
-      {
-        heading: "Decor Styles",
-        links: [
-          { label: "Forests, Lakes & Cabins", slug: "forests-lakes" },
-          { label: "Floral & Garden", slug: "floral-garden" },
-          { label: "Landscapes", slug: "landscapes" },
-          { label: "Seascapes", slug: "seascapes" },
-        ],
-      },
-      {
-        heading: "Art Styles",
-        links: [
-          { label: "Abstract", slug: "abstract" },
-          { label: "Impressionism", slug: "impressionism" },
-          { label: "Modern", slug: "modern" },
+          { label: "Bathroom Humor", slug: "bathroom-humor" },
+          { label: "Bar Prints", slug: "bar-prints" },
+          { label: "Kitchen Prints", slug: "kitchen-prints" },
+          { label: "Beach House", slug: "beach-house" },
         ],
       },
     ],
@@ -116,57 +50,27 @@ export const navigation: NavItem[] = [
   {
     label: "Rooms",
     dropdown: [
-      { label: "Bathroom", slug: "bathroom" },
-      { label: "Bedroom", slug: "bedroom" },
-      { label: "Dining Room", slug: "dining-room" },
-      { label: "Kitchen", slug: "kitchen" },
-      { label: "Living Room", slug: "living-room" },
-      { label: "Man Cave", slug: "man-cave" },
-    ],
-  },
-  {
-    label: "Colors",
-    megaMenu: [
-      {
-        heading: "Main Colors",
-        links: [
-          { label: "Blue", slug: "color-blue" },
-          { label: "Green", slug: "color-green" },
-          { label: "Red", slug: "color-red" },
-          { label: "Yellow", slug: "color-yellow" },
-        ],
-      },
-      {
-        heading: "Trending",
-        links: [
-          { label: "Beige", slug: "color-beige" },
-          { label: "Orange", slug: "color-orange" },
-          { label: "Purple", slug: "color-purple" },
-        ],
-      },
-      {
-        heading: "Blacks & Whites",
-        links: [
-          { label: "Black", slug: "color-black" },
-          { label: "White", slug: "color-white" },
-          { label: "Black & White", slug: "color-bw" },
-        ],
-      },
+      { label: "Bathroom", slug: "room-bathroom" },
+      { label: "Bedroom", slug: "room-bedroom" },
+      { label: "Kitchen", slug: "room-kitchen" },
+      { label: "Living Room", slug: "room-living-room" },
+      { label: "Man Cave", slug: "room-man-cave" },
+      { label: "Dining Room", slug: "room-dining-room" },
     ],
   },
   {
     label: "Artists",
     dropdown: [
-      { label: "Ansel Adams", slug: "ansel-adams" },
-      { label: "Caravaggio", slug: "caravaggio" },
-      { label: "Claude Monet", slug: "monet" },
-      { label: "Edgar Degas", slug: "degas" },
-      { label: "Eugène Delacroix", slug: "delacroix" },
-      { label: "Pierre-Auguste Renoir", slug: "renoir" },
-      { label: "Vincent Van Gogh", slug: "van-gogh" },
+      { label: "Claude Monet", slug: "artist-monet" },
+      { label: "Vincent Van Gogh", slug: "artist-van-gogh" },
+      { label: "Ansel Adams", slug: "artist-ansel-adams" },
+      { label: "Keith Haring", slug: "artist-keith-haring" },
+      { label: "Yayoi Kusama", slug: "artist-yayoi-kusama" },
+      { label: "Henri Matisse", slug: "artist-henri-matisse" },
+      { label: "Picasso", slug: "artist-picasso" },
     ],
   },
-  { label: "About Us", href: "/about" },
+  { label: "About", href: "/about" },
   {
     label: "Help",
     dropdown: [

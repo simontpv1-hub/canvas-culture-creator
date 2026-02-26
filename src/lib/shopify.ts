@@ -279,6 +279,30 @@ export function normalizeCollection(node: any): ShopifyCollection {
 
 // ── Fetch helpers ──
 
+// SHOPIFY TAG REFERENCE — add these exact tags in merchOne when publishing:
+//
+// MOOD & STYLE:
+// dark-gloomy | aesthetic-art | modern-monochrome | stockholm-design
+//
+// CULTURE:
+// movie-posters | movie-posters-1950s | movie-posters-1960s | movie-posters-1970s | movie-posters-1980s | movie-posters-1990s
+// the-new-yorker | vintage-travel | cars
+//
+// SPACES:
+// bathroom-humor | bar-prints | kitchen-prints | beach-house
+//
+// ROOMS:
+// room-bathroom | room-bedroom | room-kitchen | room-living-room | room-man-cave | room-dining-room
+//
+// ARTISTS:
+// artist-monet | artist-van-gogh | artist-ansel-adams | artist-keith-haring | artist-yayoi-kusama | artist-henri-matisse | artist-picasso
+//
+// SHOP ALL STYLE FILTERS:
+// impressionism | neo-impressionism | post-impressionism | art-nouveau | art-deco | baroque | classical-art | neoclassicism | romanticism | realism | expressionism
+// japanese-ukiyo-e | indian-art | chinese-art | asian-artists
+// vintage-botanical | vintage-posters | vintage-animals
+// modern-art | pop-art | abstract | ancient-egypt | arts-crafts-movement
+
 export async function fetchAllProducts(first = 50): Promise<ShopifyProduct[]> {
   const { data, errors } = await shopifyClient.request(PRODUCTS_QUERY, {
     variables: { first },

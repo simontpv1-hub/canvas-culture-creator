@@ -7,7 +7,7 @@ import CartDrawer from "@/components/cart/CartDrawer";
 import ProductCard from "@/components/product/ProductCard";
 import { useShopifyProducts, useShopifyCollection } from "@/hooks/useShopifyProducts";
 import { ShopifyProduct } from "@/lib/shopify";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, X } from "lucide-react";
 import { motion } from "framer-motion";
 
 const sortOptions = [
@@ -18,13 +18,73 @@ const sortOptions = [
   { label: "Price: High–Low", value: "price-desc" },
 ];
 
+/* ── Movie Posters decade filters ── */
+const movieDecades = [
+  { label: "All", tag: "" },
+  { label: "1950s", tag: "movie-posters-1950s" },
+  { label: "1960s", tag: "movie-posters-1960s" },
+  { label: "1970s", tag: "movie-posters-1970s" },
+  { label: "1980s", tag: "movie-posters-1980s" },
+  { label: "1990s", tag: "movie-posters-1990s" },
+];
+
+/* ── Shop All style filter groups ── */
+const styleFilterGroups = [
+  {
+    heading: "Vintage Art Movements",
+    filters: [
+      { label: "Impressionism", tag: "impressionism" },
+      { label: "Neo Impressionism", tag: "neo-impressionism" },
+      { label: "Post Impressionism", tag: "post-impressionism" },
+      { label: "Art Nouveau", tag: "art-nouveau" },
+      { label: "Art Deco", tag: "art-deco" },
+      { label: "Baroque", tag: "baroque" },
+      { label: "Classical Art", tag: "classical-art" },
+      { label: "Neoclassicism", tag: "neoclassicism" },
+      { label: "Romanticism", tag: "romanticism" },
+      { label: "Realism", tag: "realism" },
+      { label: "Expressionism", tag: "expressionism" },
+    ],
+  },
+  {
+    heading: "Asian & World Art",
+    filters: [
+      { label: "Japanese Ukiyo-e", tag: "japanese-ukiyo-e" },
+      { label: "Indian Art", tag: "indian-art" },
+      { label: "Chinese Art", tag: "chinese-art" },
+      { label: "Asian Artists", tag: "asian-artists" },
+    ],
+  },
+  {
+    heading: "Vintage Collections",
+    filters: [
+      { label: "Vintage Botanical", tag: "vintage-botanical" },
+      { label: "Vintage Posters", tag: "vintage-posters" },
+      { label: "Vintage Animals", tag: "vintage-animals" },
+    ],
+  },
+  {
+    heading: "Modern & Pop",
+    filters: [
+      { label: "Modern Art", tag: "modern-art" },
+      { label: "Pop Art", tag: "pop-art" },
+      { label: "Abstract", tag: "abstract" },
+      { label: "Ancient Egypt", tag: "ancient-egypt" },
+      { label: "Arts & Crafts Movement", tag: "arts-crafts-movement" },
+    ],
+  },
+];
+
 const Collection = () => {
   const { slug } = useParams();
   const [sort, setSort] = useState("featured");
   const [showInStock, setShowInStock] = useState(true);
   const [visibleCount, setVisibleCount] = useState(16);
+  const [decadeFilter, setDecadeFilter] = useState("");
+  const [activeStyleTags, setActiveStyleTags] = useState<string[]>([]);
 
   const isAll = slug === "all" || !slug;
+  const isMoviePosters = slug === "movie-posters";
 
   const { data: allProducts = [], isLoading: loadingAll } = useShopifyProducts(100);
   const { data: collectionData, isLoading: loadingCol } = useShopifyCollection(
@@ -44,6 +104,18 @@ const Collection = () => {
     let items = baseProducts;
     if (showInStock) items = items.filter((p) => p.inStock);
 
+    // Movie posters decade filter
+    if (isMoviePosters && decadeFilter) {
+      items = items.filter((p) => p.tags.includes(decadeFilter));
+    }
+
+    // Shop All style tag filters (multi-select OR logic)
+    if (isAll && activeStyleTags.length > 0) {
+      items = items.filter((p) =>
+        activeStyleTags.some((tag) => p.tags.includes(tag))
+      );
+    }
+
     switch (sort) {
       case "az": return [...items].sort((a, b) => a.title.localeCompare(b.title));
       case "za": return [...items].sort((a, b) => b.title.localeCompare(a.title));
@@ -51,9 +123,16 @@ const Collection = () => {
       case "price-desc": return [...items].sort((a, b) => b.price - a.price);
       default: return items;
     }
-  }, [baseProducts, sort, showInStock]);
+  }, [baseProducts, sort, showInStock, decadeFilter, activeStyleTags, isMoviePosters, isAll]);
 
   const visible = filtered.slice(0, visibleCount);
+
+  const toggleStyleTag = (tag: string) => {
+    setActiveStyleTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+    );
+    setVisibleCount(16);
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -75,6 +154,72 @@ const Collection = () => {
             {isLoading ? "Loading..." : `${filtered.length} product${filtered.length !== 1 ? "s" : ""}`}
           </p>
         </motion.div>
+
+        {/* Movie Posters decade filter */}
+        {isMoviePosters && (
+          <div className="flex flex-wrap items-center gap-1 sm:gap-2 mb-8">
+            {movieDecades.map((d) => (
+              <button
+                key={d.tag || "all"}
+                onClick={() => { setDecadeFilter(d.tag); setVisibleCount(16); }}
+                className={`px-4 py-2 text-xs font-body font-medium uppercase tracking-wider transition-colors relative ${
+                  decadeFilter === d.tag
+                    ? "text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {d.label}
+                {decadeFilter === d.tag && (
+                  <motion.span
+                    layoutId="decade-underline"
+                    className="absolute bottom-0 left-2 right-2 h-0.5 bg-gold"
+                  />
+                )}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Shop All style filters */}
+        {isAll && (
+          <div className="mb-8 space-y-4">
+            {styleFilterGroups.map((group) => (
+              <div key={group.heading}>
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-xs font-body font-semibold uppercase tracking-widest text-muted-foreground">
+                    {group.heading}
+                  </h3>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {group.filters.map((f) => {
+                    const active = activeStyleTags.includes(f.tag);
+                    return (
+                      <button
+                        key={f.tag}
+                        onClick={() => toggleStyleTag(f.tag)}
+                        className={`px-3 py-1.5 text-xs font-body border transition-all ${
+                          active
+                            ? "border-gold bg-gold text-primary-foreground"
+                            : "border-border text-muted-foreground hover:border-gold hover:text-foreground"
+                        }`}
+                      >
+                        {f.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+            {activeStyleTags.length > 0 && (
+              <button
+                onClick={() => { setActiveStyleTags([]); setVisibleCount(16); }}
+                className="flex items-center gap-1 text-xs font-body text-gold hover:text-gold-hover transition-colors"
+              >
+                <X className="w-3 h-3" /> Clear all filters
+              </button>
+            )}
+          </div>
+        )}
 
         <div className="flex items-center justify-between mb-8 pb-4 border-b border-border">
           <label className="flex items-center gap-2 text-sm font-body">
