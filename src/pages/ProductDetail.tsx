@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -8,6 +8,14 @@ import { useShopifyProduct, useShopifyProducts } from "@/hooks/useShopifyProduct
 import { useCart } from "@/stores/cartStore";
 import { Paintbrush, RotateCcw, Truck, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  type CarouselApi,
+} from "@/components/ui/carousel";
 
 const tabs = ["Overview", "Materials", "Shipping"];
 
@@ -19,6 +27,15 @@ const ProductDetail = () => {
   const [selectedSize, setSelectedSize] = useState(0);
   const [activeTab, setActiveTab] = useState("Overview");
   const [added, setAdded] = useState(false);
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    if (!api) return;
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap());
+    });
+  }, [api]);
 
   if (isLoading) {
     return (
@@ -90,9 +107,39 @@ const ProductDetail = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6 }}
-              className="aspect-[3/4] bg-secondary overflow-hidden"
+              className="flex flex-col gap-4"
             >
-              <img src={product.image} alt={product.title} className="w-full h-full object-cover" />
+              <Carousel setApi={setApi} className="w-full bg-secondary overflow-hidden">
+                <CarouselContent>
+                  {product.images.map((imgUrl, index) => (
+                    <CarouselItem key={index} className="aspect-[3/4]">
+                      <img src={imgUrl} alt={`${product.title} - ${index + 1}`} className="w-full h-full object-cover" />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                {product.images.length > 1 && (
+                  <>
+                    <CarouselPrevious className="left-4 bg-white/80 hover:bg-white" />
+                    <CarouselNext className="right-4 bg-white/80 hover:bg-white" />
+                  </>
+                )}
+              </Carousel>
+              
+              {product.images.length > 1 && (
+                <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                  {product.images.map((imgUrl, index) => (
+                    <button
+                      key={index}
+                      onClick={() => api?.scrollTo(index)}
+                      className={`relative w-20 h-20 flex-shrink-0 border-2 transition-all ${
+                        current === index ? "border-gold" : "border-transparent opacity-60 hover:opacity-100"
+                      }`}
+                    >
+                      <img src={imgUrl} className="w-full h-full object-cover" alt="thumbnail" />
+                    </button>
+                  ))}
+                </div>
+              )}
             </motion.div>
 
             <motion.div
