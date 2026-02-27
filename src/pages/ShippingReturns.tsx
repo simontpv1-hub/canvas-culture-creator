@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { Truck, RotateCcw, Clock, Camera } from "lucide-react";
-import PromoBanner from "@/components/layout/PromoBanner";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import CartDrawer from "@/components/cart/CartDrawer";
@@ -36,7 +35,6 @@ const steps = [
 
 const ShippingReturns = () => (
   <div className="min-h-screen flex flex-col">
-    <PromoBanner />
     <Header />
     <CartDrawer />
 

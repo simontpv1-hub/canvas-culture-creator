@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import PromoBanner from "@/components/layout/PromoBanner";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import CartDrawer from "@/components/cart/CartDrawer";
@@ -24,7 +23,6 @@ const ProductDetail = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen flex flex-col">
-        <PromoBanner />
         <Header />
         <CartDrawer />
         <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-8 py-10">
@@ -45,7 +43,6 @@ const ProductDetail = () => {
   if (!product) {
     return (
       <div className="min-h-screen flex flex-col">
-        <PromoBanner />
         <Header />
         <CartDrawer />
         <main className="flex-1 flex items-center justify-center">
@@ -75,7 +72,6 @@ const ProductDetail = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <PromoBanner />
       <Header />
       <CartDrawer />
 

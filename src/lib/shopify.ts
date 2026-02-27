@@ -281,20 +281,23 @@ export function normalizeCollection(node: any): ShopifyCollection {
 
 // SHOPIFY TAG REFERENCE — add these exact tags in merchOne when publishing:
 //
-// MOOD & STYLE:
-// dark-gloomy | aesthetic-art | modern-monochrome | stockholm-design | beach-house
+// FORMAT:
+// landscape | portrait
 //
-// CULTURE:
-// the-new-yorker | travel | cars
+// SUBJECTS:
+// cars | animals | smoking | sports | magazines | music | movies
 //
-// MOVIE POSTERS:
-// movie-posters-1950s | movie-posters-1960s | movie-posters-1970s | movie-posters-1980s | movie-posters-1990s
+// STYLES:
+// stockholm | beach | floral | vintage | landscapes
 //
-// SPACES:
-// bar | kitchen | bathroom | bedroom | living-room
+// ROOMS:
+// bedroom | mancave | bar | living-room | bathroom | kitchen | gym
 //
 // ARTISTS:
-// artist-monet | artist-van-gogh | artist-ansel-adams | artist-keith-haring | artist-yayoi-kusama | artist-henri-matisse | artist-picasso
+// artist-picasso | artist-monet | artist-van-gogh | artist-ansel-adams | artist-keith-haring | artist-yayoi-kusama | artist-henri-matisse
+//
+// AMBIANCE:
+// dark-gloomy | aesthetic-art | modern-monochrome
 //
 // SHOP ALL STYLE FILTERS:
 // impressionism | neo-impressionism | post-impressionism | art-nouveau | art-deco | baroque | classical-art | neoclassicism | romanticism | realism | expressionism
