@@ -5,15 +5,27 @@ import { navigation, NavItem } from "@/data/navigation";
 import { useCart } from "@/stores/cartStore";
 import { motion, AnimatePresence } from "framer-motion";
 
-/* ── Announcement Bar (Level 1) ── */
+/* ── Scrolling Announcement Bar (Level 1) ── */
+const marqueeItems = [
+  "🇺🇸 HAND-MADE IN USA",
+  "📦 FREE SHIPPING OVER $75",
+  "🔄 30-DAY RETURNS",
+  "⭐ 2,000+ HAPPY CUSTOMERS",
+  "🎁 BUY 3 GET THE 4TH FREE — CODE: BUY3GET1",
+];
+
 const AnnouncementBar = () => (
-  <div
-    className="py-2.5 text-center"
-    style={{ backgroundColor: "#2d409f" }}
-  >
-    <p className="text-xs sm:text-sm font-body font-medium tracking-wider text-white">
-      BUY 3 GET THE 4TH FREE! USE CODE: <span className="font-bold">'BUY3GET1'</span>
-    </p>
+  <div className="bg-charcoal py-2.5 overflow-hidden">
+    <div className="animate-marquee flex whitespace-nowrap">
+      {[...marqueeItems, ...marqueeItems, ...marqueeItems, ...marqueeItems].map((text, i) => (
+        <span
+          key={i}
+          className="mx-8 text-xs font-body tracking-wider text-gold"
+        >
+          {text}
+        </span>
+      ))}
+    </div>
   </div>
 );
 
