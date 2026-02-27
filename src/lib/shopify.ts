@@ -27,7 +27,7 @@ const PRODUCT_FRAGMENT = `
       minVariantPrice { amount currencyCode }
       maxVariantPrice { amount currencyCode }
     }
-    images(first: 2) {
+    images(first: 10) {
       edges {
         node {
           url
@@ -225,6 +225,7 @@ export interface ShopifyProduct {
   price: number;
   compareAtPrice?: number;
   image: string;
+  images: string[];
   hoverImage?: string;
   category: string[];
   tags: string[];
@@ -241,7 +242,7 @@ export interface ShopifyCollection {
 }
 
 export function normalizeProduct(node: any): ShopifyProduct {
-  const images = node.images?.edges?.map((e: any) => e.node) ?? [];
+  const allImages = node.images?.edges?.map((e: any) => e.node.url) ?? [];
   const variants = node.variants?.edges?.map((e: any) => e.node) ?? [];
   const minPrice = parseFloat(node.priceRange?.minVariantPrice?.amount ?? "0");
   const compareAt = parseFloat(node.compareAtPriceRange?.minVariantPrice?.amount ?? "0");
@@ -252,8 +253,9 @@ export function normalizeProduct(node: any): ShopifyProduct {
     slug: node.handle,
     price: minPrice,
     compareAtPrice: compareAt > minPrice ? compareAt : undefined,
-    image: images[0]?.url ?? "/placeholder.svg",
-    hoverImage: images[1]?.url,
+    image: allImages[0] ?? "/placeholder.svg",
+    images: allImages.length > 0 ? allImages : ["/placeholder.svg"],
+    hoverImage: allImages[1],
     category: node.productType ? [node.productType.toLowerCase()] : [],
     tags: node.tags ?? [],
     sizes: variants.length > 0
@@ -278,32 +280,6 @@ export function normalizeCollection(node: any): ShopifyCollection {
 }
 
 // ── Fetch helpers ──
-
-// SHOPIFY TAG REFERENCE — add these exact tags in merchOne when publishing:
-//
-// FORMAT:
-// landscape | portrait
-//
-// SUBJECTS:
-// cars | animals | smoking | sports | magazines | music | movies
-//
-// STYLES:
-// stockholm | beach | floral | vintage | landscapes
-//
-// ROOMS:
-// bedroom | mancave | bar | living-room | bathroom | kitchen | gym
-//
-// ARTISTS:
-// artist-picasso | artist-monet | artist-van-gogh | artist-ansel-adams | artist-keith-haring | artist-yayoi-kusama | artist-henri-matisse
-//
-// AMBIANCE:
-// dark-gloomy | aesthetic-art | modern-monochrome
-//
-// SHOP ALL STYLE FILTERS:
-// impressionism | neo-impressionism | post-impressionism | art-nouveau | art-deco | baroque | classical-art | neoclassicism | romanticism | realism | expressionism
-// japanese-ukiyo-e | indian-art | chinese-art | asian-artists
-// vintage-botanical | vintage-posters | vintage-animals
-// modern-art | pop-art | abstract | ancient-egypt | arts-crafts-movement
 
 export async function fetchAllProducts(first = 50): Promise<ShopifyProduct[]> {
   const { data, errors } = await shopifyClient.request(PRODUCTS_QUERY, {
