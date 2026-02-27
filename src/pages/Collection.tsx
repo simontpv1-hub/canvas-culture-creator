@@ -1,6 +1,5 @@
 import { useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
-import PromoBanner from "@/components/layout/PromoBanner";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import CartDrawer from "@/components/cart/CartDrawer";
@@ -136,7 +135,6 @@ const Collection = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <PromoBanner />
       <Header />
       <CartDrawer />
 
@@ -269,7 +267,8 @@ const Collection = () => {
 
             {filtered.length === 0 && (
               <div className="text-center py-20">
-                <p className="text-muted-foreground font-body">No products found in this collection.</p>
+                <h2 className="text-2xl font-display font-semibold text-foreground mb-3">Coming Soon</h2>
+                <p className="text-muted-foreground font-body">We're curating this collection. Check back soon for new additions.</p>
               </div>
             )}
 

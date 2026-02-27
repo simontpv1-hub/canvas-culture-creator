@@ -1,4 +1,3 @@
-import PromoBanner from "@/components/layout/PromoBanner";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import CartDrawer from "@/components/cart/CartDrawer";
@@ -21,7 +20,6 @@ const Index = () => {
       
       <ScrollProgressBar />
       <ScrollToTop />
-      <PromoBanner />
       <Header />
       <CartDrawer />
       <WelcomePopup />
