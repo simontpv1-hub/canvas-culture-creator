@@ -248,7 +248,7 @@ export function normalizeProduct(node: any): ShopifyProduct {
   const compareAt = parseFloat(node.compareAtPriceRange?.minVariantPrice?.amount ?? "0");
 
   // 🚨 TRI DES IMAGES : On garde uniquement la 27, 26 et 25 🚨
-  const imageOrder = [27, 26, 25];
+  const imageOrder = [26, 27, 25];
 
   const customImages = imageOrder
     .map((index) => allImages[index])
