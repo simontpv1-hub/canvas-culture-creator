@@ -27,7 +27,7 @@ const PRODUCT_FRAGMENT = `
       minVariantPrice { amount currencyCode }
       maxVariantPrice { amount currencyCode }
     }
-    images(first: 10) {
+    images(first: 40) {
       edges {
         node {
           url
@@ -247,15 +247,25 @@ export function normalizeProduct(node: any): ShopifyProduct {
   const minPrice = parseFloat(node.priceRange?.minVariantPrice?.amount ?? "0");
   const compareAt = parseFloat(node.compareAtPriceRange?.minVariantPrice?.amount ?? "0");
 
+  // 🚨 TRI DES IMAGES : On garde uniquement la 27, 26 et 25 🚨
+  const imageOrder = [27, 26, 25];
+
+  const customImages = imageOrder
+    .map((index) => allImages[index])
+    .filter((url) => url !== undefined);
+
+  // Sécurité : si un produit n'a pas 27 images, on affiche au moins la première
+  const finalImages = customImages.length > 0 ? customImages : [allImages[0] ?? "/placeholder.svg"];
+
   return {
     id: node.id,
     title: node.title,
     slug: node.handle,
     price: minPrice,
     compareAtPrice: compareAt > minPrice ? compareAt : undefined,
-    image: allImages[0] ?? "/placeholder.svg",
-    images: allImages.length > 0 ? allImages : ["/placeholder.svg"],
-    hoverImage: allImages[1],
+    image: finalImages[0], 
+    images: finalImages, 
+    hoverImage: finalImages[1],
     category: node.productType ? [node.productType.toLowerCase()] : [],
     tags: node.tags ?? [],
     sizes: variants.length > 0
