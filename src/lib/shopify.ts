@@ -108,6 +108,17 @@ export const PRODUCT_BY_HANDLE_QUERY = `
   ${PRODUCT_FRAGMENT}
 `;
 
+export const PRODUCTS_BY_TAG_QUERY = `
+  query ProductsByTag($query: String!, $first: Int!) {
+    products(first: $first, query: $query) {
+      edges {
+        node { ...ProductFields }
+      }
+    }
+  }
+  ${PRODUCT_FRAGMENT}
+`;
+
 // ── Checkout Mutations ──
 
 export const CREATE_CHECKOUT_MUTATION = `
@@ -331,6 +342,14 @@ export async function fetchProductByHandle(handle: string): Promise<ShopifyProdu
   if (errors) console.error("Shopify product error:", errors);
   if (!data?.product) return null;
   return normalizeProduct(data.product);
+}
+
+export async function fetchProductsByTag(tag: string, first = 10): Promise<ShopifyProduct[]> {
+  const { data, errors } = await shopifyClient.request(PRODUCTS_BY_TAG_QUERY, {
+    variables: { query: `tag:${tag}`, first },
+  });
+  if (errors) console.error("Shopify tag search error:", errors);
+  return (data?.products?.edges ?? []).map((e: any) => normalizeProduct(e.node));
 }
 
 // ── Checkout helpers ──

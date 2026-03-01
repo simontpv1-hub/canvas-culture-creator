@@ -4,6 +4,7 @@ import {
   fetchCollectionProducts,
   fetchCollections,
   fetchProductByHandle,
+  fetchProductsByTag,
 } from "@/lib/shopify";
 
 export function useShopifyProducts(first = 50) {
@@ -36,6 +37,15 @@ export function useShopifyProduct(handle: string | undefined) {
     queryKey: ["shopify-product", handle],
     queryFn: () => fetchProductByHandle(handle!),
     enabled: !!handle,
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+export function useShopifyProductsByTag(tag: string | undefined) {
+  return useQuery({
+    queryKey: ["shopify-products-tag", tag],
+    queryFn: () => fetchProductsByTag(tag!, 10),
+    enabled: !!tag,
     staleTime: 5 * 60 * 1000,
   });
 }
