@@ -15,9 +15,11 @@ const ProductCarousel = ({ title, viewAllLink, filterTag }: ProductCarouselProps
   const scrollRef = useRef<HTMLDivElement>(null);
   const { data: products = [], isLoading } = useShopifyProducts();
 
+  // Only show canvas versions so each artwork appears once
+  const canvasOnly = products.filter((p) => p.tags.includes("style:canvas"));
   const filtered = filterTag
-    ? products.filter((p) => p.tags.map(t => t.toLowerCase()).includes(filterTag.toLowerCase()))
-    : products;
+    ? canvasOnly.filter((p) => p.tags.map(t => t.toLowerCase()).includes(filterTag.toLowerCase()))
+    : canvasOnly;
 
   const scroll = (dir: number) => {
     scrollRef.current?.scrollBy({ left: dir * 300, behavior: "smooth" });

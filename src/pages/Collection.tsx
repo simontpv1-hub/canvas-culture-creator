@@ -95,9 +95,11 @@ const Collection = () => {
   const title = collectionData?.collection?.title
     ?? (slug ? slug.split("-").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ") : "All Products");
 
-  const baseProducts: ShopifyProduct[] = isAll
+  // Only show canvas versions (style:canvas) so each artwork appears once
+  const baseProducts: ShopifyProduct[] = (isAll
     ? allProducts
-    : (collectionData?.products ?? []);
+    : (collectionData?.products ?? [])
+  ).filter((p) => p.tags.includes("style:canvas"));
 
   const filtered = useMemo(() => {
     let items = baseProducts;
